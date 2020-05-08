@@ -6,6 +6,7 @@ import Head from "next/head";
 import { Layout } from "antd";
 import { MainFooter } from "./MainFooter";
 import styled from "styled-components";
+import { MainNavbar } from "./MainNavbar";
 
 const { Content } = Layout;
 
@@ -14,7 +15,7 @@ const MainHead = ({ title }: { title: string }) => (
     <title>{title}</title>
     <meta charSet="utf-8" />
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-    <meta name="description" content="A Home Health Care management system." />
+    <meta name="description" content="A complete solution for Home Health Care Providers." />
     <meta name="author" content="Tim Birkmire" />
     <meta
       name="keyword"
@@ -26,7 +27,7 @@ const MainHead = ({ title }: { title: string }) => (
     <meta property="og:image" content="/logo.svg" />
     <meta
       property="og:description"
-      content="A Home Health Care management system."
+      content="A complete solution for Home Health Care Providers."
     />
     <link
       rel="apple-touch-icon"
@@ -69,8 +70,10 @@ export class MainLayout extends Component<Props> {
         <GlobalStyle />
         <StyledBody>
           <Layout>
+            <MainNavbar />
             <Content>{children}</Content>
           </Layout>
+          <MainFooter />
         </StyledBody>
       </ThemeProvider>
     );
