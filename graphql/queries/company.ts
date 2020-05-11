@@ -25,6 +25,14 @@ export const companyGraphQL = gql`
       contactPhone
       contactEmail
       owner
+      logo {
+          id
+          fileName
+          height
+          width
+          size
+          handle
+        }
     }
   }
 `;

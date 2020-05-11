@@ -1,16 +1,17 @@
-import { QueryHookOptions, useQuery } from '@apollo/react-hooks';
-import * as _ from 'lodash';
-import { companiesGraphQL } from '../graphql/queries/companies';
-import { userCompaniesGraphQL } from '../graphql/queries/userCompanies';
-import { Row } from 'antd';
-import { Company } from '../generated/apollo-components';
-import { Error } from './notify/Error';
-import { Loading } from './notify/Loading';
-import { Warning } from './notify/Warning';
+import { QueryHookOptions, useQuery } from "@apollo/react-hooks";
+import * as _ from "lodash";
+import { companiesGraphQL } from "../graphql/queries/companies";
+import { userCompaniesGraphQL } from "../graphql/queries/userCompanies";
+import { Row } from "antd";
+import { Company } from "../generated/apollo-components";
+import { Error } from "./notify/Error";
+import { Loading } from "./notify/Loading";
+import { Warning } from "./notify/Warning";
+import { CompanyListItem } from "./CompanyListItem";
 
 export enum queryEnum {
-  userCompanies = 'userCompanies',
-  companies = 'companies',
+  userCompanies = "userCompanies",
+  companies = "companies",
 }
 
 type CompaniesListProps = {
@@ -29,8 +30,8 @@ export const CompaniesList = ({
   const { loading, data, error } = useQuery(query, options);
 
   const parentArray = _.get(data, queryType);
-  const companiesList = _.map(parentArray, value =>
-    _.get(value, 'company', value),
+  const companiesList = _.map(parentArray, (value) =>
+    _.get(value, "company", value)
   );
 
   if (loading) return <Loading />;
@@ -46,7 +47,11 @@ export const CompaniesList = ({
   return (
     <Row>
       {companiesList.map((company: Company) => (
-        <p key={company.id}>{company.legalBusinessName}</p>
+        <CompanyListItem
+          company={company}
+          key={`${company.id}-${queryType}`}
+          parentRoute={parentRoute}
+        />
       ))}
     </Row>
   );
