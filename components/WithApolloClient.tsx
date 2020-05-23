@@ -10,7 +10,7 @@ import getConfig from "next/config";
 const { publicRuntimeConfig } = getConfig();
 
 const {
-  graphcms: { GRAPHCMSID, GRAPHCMSURL, BRANCH },
+  backend: { BACKEND_URL },
 } = publicRuntimeConfig;
 
 let apolloClient = null;
@@ -31,7 +31,7 @@ export function withApollo(PageComponent, { ssr = true } = {}) {
       </ApolloProvider>
     );
   };
-  
+
   // Set the correct displayName in development
   if (process.env.NODE_ENV !== "production") {
     const displayName =
@@ -44,18 +44,18 @@ export function withApollo(PageComponent, { ssr = true } = {}) {
   if (ssr || PageComponent.getInitialProps) {
     WithApollo.getInitialProps = async (ctx) => {
       const { AppTree } = ctx;
-      
+
       // Initialize ApolloClient, add it to the ctx object so
       // we can use it in `PageComponent.getInitialProp`.
-      
+
       const apolloClient = (ctx.apolloClient = initApolloClient({}));
-      
+
       // Run wrapped getInitialProps methods
       let pageProps = {};
       if (PageComponent.getInitialProps) {
         pageProps = await PageComponent.getInitialProps(ctx);
       }
-      
+
       // Only on the server:
       if (typeof window === "undefined") {
         // When redirecting, the response is finished.
@@ -63,7 +63,7 @@ export function withApollo(PageComponent, { ssr = true } = {}) {
         if (ctx.res && ctx.res.finished) {
           return pageProps;
         }
-        
+
         // Only if ssr is enabled
         if (ssr) {
           try {
@@ -83,23 +83,23 @@ export function withApollo(PageComponent, { ssr = true } = {}) {
             // https://www.apollographql.com/docs/react/api/react-apollo.html#graphql-query-data-error
             console.error("Error while running `getDataFromTree`", error);
           }
-          
+
           // getDataFromTree does not call componentWillUnmount
           // head side effect therefore need to be cleared manually
           Head.rewind();
         }
       }
-      
+
       // Extract query data from the Apollo store
       const apolloState = apolloClient.cache.extract();
-      
+
       return {
         ...pageProps,
         apolloState,
       };
     };
   }
-  
+
   return WithApollo;
 }
 
@@ -109,7 +109,7 @@ export function withApollo(PageComponent, { ssr = true } = {}) {
  * @param  {Object} initialState
  */
 
- function initApolloClient(initialState) {
+function initApolloClient(initialState) {
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
   if (typeof window === "undefined") {
@@ -120,7 +120,7 @@ export function withApollo(PageComponent, { ssr = true } = {}) {
   if (!apolloClient) {
     apolloClient = createApolloClient(initialState);
   }
-  
+
   return apolloClient;
 }
 
@@ -133,7 +133,7 @@ function createApolloClient(initialState = {}) {
   return new ApolloClient({
     ssrMode: typeof window === "undefined", // Disables forceFetch on the server (so queries are only run once)
     link: new HttpLink({
-      uri: `${GRAPHCMSURL}/${GRAPHCMSID}/${BRANCH}`,
+      uri: BACKEND_URL,
       credentials: "same-origin", // Additional fetch() options like `credentials` or `headers`
       fetch,
     }),
