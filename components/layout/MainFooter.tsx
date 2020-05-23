@@ -1,13 +1,20 @@
-import { Layout, Row, Col } from 'antd';
+import { Layout, Row, Col } from "antd";
+import Link from "next/link";
+import styled from "styled-components";
 
 const { Footer } = Layout;
 
+const StyledFooter = styled(Footer)`
+  ${({ theme }) => `
+        text-align: center;
+    `}
+`;
 export const MainFooter = () => (
-  <Footer>
+  <StyledFooter>
     <Row>
       <Col sm={{ span: 22, offset: 1 }}>
-        <h3>Home Health Care Management System</h3>
+        <p>Footer</p>
       </Col>
     </Row>
-  </Footer>
+  </StyledFooter>
 );

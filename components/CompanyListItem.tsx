@@ -1,10 +1,8 @@
 import { Company } from "../generated/apollo-components";
 import styled from "styled-components";
-import GraphImg from "graphcms-image";
 import { Col } from "antd";
 import Link from "next/link";
 import EllipsisText from "react-ellipsis-text";
-import { HomeOutlined } from "@ant-design/icons";
 import { Card } from "antd";
 
 const StyledCompany = styled(Col)`
@@ -19,18 +17,24 @@ const StyledCompany = styled(Col)`
         }
         .nameContainer {
             background-color: white;
-            height: 90px;
+            height: 95px;
             display: flex;
             align-items: center;
             justify-content: center;
             h2 {
+                color: inherit;
                 padding: 0px ${theme["padding-small"]};
                 line-height: 1.25em;
             }
         }
+        .companyTitle {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
         .companyInfo {
-            margin-bottom: 2em;
             font-size: 1.25em;
+            text-align: center;
             // font-weight: bold;
         }
     `}
@@ -53,18 +57,20 @@ export const CompanyListItem = ({
     >
       <Card hoverable>
         <Link href={`/${parentRoute}/${id}`}>
-          {/* <div>{logo ? <GraphImg image={logo} /> : null}</div> */}
-          <div className={"nameContainer"}>
-            <h2>{legalBusinessName}</h2>
+          <div className={"companyTitle"}>
+            <div className={"nameContainer"}>
+              <h2>{legalBusinessName}</h2>
+            </div>
           </div>
         </Link>
         <div className={"companyInfo"}>
-          <p>
+          <span>
             <EllipsisText text={`${city}, ${state}`} length={110} />
-          </p>
-          <p>
+          </span>
+          <br />
+          <span>
             <EllipsisText text={phone} length={110} />
-          </p>
+          </span>
         </div>
       </Card>
     </StyledCompany>

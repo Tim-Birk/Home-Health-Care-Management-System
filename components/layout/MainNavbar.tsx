@@ -101,6 +101,11 @@ export const MainNavbar = () => {
                 </Link>
               </Menu.Item>,
             ]}
+        <Menu.Item key="/about">
+          <Link href="/about">
+            <a>About</a>
+          </Link>
+        </Menu.Item>
       </StyledMenu>
     </StyledHeader>
   );
