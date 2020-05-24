@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 
 export const createCompanyGraphQL = gql`
-  mutation createCompanyGraphQL($data: CompanyCreateInput!) {
+  mutation($data: CompanyCreateInput!) {
     createCompany(data: $data) {
       id
       legalBusinessName

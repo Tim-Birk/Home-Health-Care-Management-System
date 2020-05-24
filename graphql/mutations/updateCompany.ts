@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 
 export const updateCompanyGraphQL = gql`
-  mutation updateCompanyGraphQL(
+  mutation(
     $data: CompanyUpdateInput!
     $where: CompanyWhereUniqueInput!
   ) {

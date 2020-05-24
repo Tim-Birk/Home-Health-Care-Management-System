@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 
 export const companyGraphQL = gql`
-  query companyGraphQL($where: CompanyWhereUniqueInput!) {
+  query($where: CompanyWhereUniqueInput!) {
     company(where: $where) {
       id
       legalBusinessName

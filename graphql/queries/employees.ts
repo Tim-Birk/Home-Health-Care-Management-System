@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 
 export const employeesGraphQL = gql`
-  query employeesGraphQL($where: EmployeeWhereInput) {
+  query($where: EmployeeWhereInput) {
     employees(where: $where) {
       id
       firstName
