@@ -15,7 +15,6 @@ export const updateEmployeeGraphQL = gql`
       gender
       birthdate
       social
-      branch
       sharedEmployee
       earningsType
       originalHireDate
@@ -44,6 +43,20 @@ export const updateEmployeeGraphQL = gql`
       isArchived
       company {
         id
+        legalBusinessName
+      }
+      branch {
+        id
+        branchName
+      }
+      images {
+        id
+        fileName
+        height
+        width
+        size
+        handle
+        url
       }
     }
   }

@@ -23,8 +23,10 @@ export const createCompanyGraphQL = gql`
       contactName
       contactTitle
       contactPhone
+      contactExt
       contactEmail
       owner
+      stage
     }
   }
 `;

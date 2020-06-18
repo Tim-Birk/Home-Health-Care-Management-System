@@ -7,7 +7,6 @@ const { Header } = Layout;
 
 const StyledHeader = styled(Header)`
   ${({ theme }) => `
-        padding-left: ${theme["padding-zero"]};
         background-color: ${theme["header-color"]};
         border-bottom-color: ${theme["header-border-color"]};
         border-bottom-width: 1px;
@@ -63,15 +62,20 @@ const Title = styled.div`
         `}
 `;
 
-export const MainNavbar = () => {
+export const LandingNavbar = () => {
   const { user, loading } = useFetchUser();
+  
 
+  
   return (
     <StyledHeader>
+      
       <TitleContainer>
         <Title>
+          <img src="/logo.svg" alt="Home Health Care Management System Logo" />
           <div>
             <h2>Home Health Care Management System</h2>
+            <p>A complete solution for Home Health Care Providers</p>
           </div>
         </Title>
       </TitleContainer>

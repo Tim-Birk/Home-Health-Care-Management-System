@@ -40,6 +40,7 @@ const StyledCompany = styled(Col)`
     `}
 `;
 
+
 export const CompanyListItem = ({
   company,
   parentRoute,

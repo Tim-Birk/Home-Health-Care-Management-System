@@ -23,16 +23,28 @@ export const companyGraphQL = gql`
       contactName
       contactTitle
       contactPhone
+      contactExt
       contactEmail
       owner
+      stage
       logo {
-          id
-          fileName
-          height
-          width
-          size
-          handle
-        }
+        id
+        fileName
+        height
+        width
+        size
+        handle
+      }
+      companyUsers {
+        user
+      }
+      companyBranches {
+        id
+        branchName
+        city
+        state
+        phone
+      }
     }
   }
 `;

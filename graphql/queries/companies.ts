@@ -23,8 +23,10 @@ export const companiesGraphQL = gql`
       contactName
       contactTitle
       contactPhone
+      contactExt
       contactEmail
       owner
+      stage
       logo {
           id
           fileName

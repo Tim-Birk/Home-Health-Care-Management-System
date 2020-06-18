@@ -26,7 +26,9 @@ export const updateCompanyGraphQL = gql`
       contactName
       contactTitle
       contactPhone
+      contactExt
       contactEmail
+      stage
       owner
     }
   }
