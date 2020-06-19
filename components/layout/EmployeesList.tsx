@@ -1,13 +1,14 @@
 import { useQuery } from "@apollo/react-hooks";
 import * as _ from "lodash";
 import { employeesGraphQL } from "../../graphql/queries/employees";
-import { Table, Button, Col } from "antd";
+import { Table, Button, Col, Avatar } from "antd";
 import styled from "styled-components";
 import { Loading } from "../notify/Loading";
 import { Error } from "../notify/Error";
 import { Warning } from "../notify/Warning";
 import { ColumnsType } from "antd/lib/table";
 import Link from "next/link";
+import { UserOutlined } from "@ant-design/icons";
 
 type EmployeeListProps = {
   id: any;
@@ -29,6 +30,16 @@ const StyledNewButton = styled(Button)`
     `}
 `;
 
+const StyledAvatar = styled(Avatar)`
+  ${({ theme }) => `
+        display: none;
+        margin-right: ${theme["margin-small"]};
+        @media ${theme.device.mobileL} { 
+          display: inline-block;
+        }
+    `}
+`;
+
 export const EmployeeList = ({ id, legalBusinessName }: EmployeeListProps) => {
   const { loading: isQueryLoading, data, error } = useQuery(employeesGraphQL, {
     variables: { where: { company: { id } } },
@@ -42,18 +53,27 @@ export const EmployeeList = ({ id, legalBusinessName }: EmployeeListProps) => {
     ...employee,
     key: employee.id,
     renderEmployee: (
-      <Link href={`/company/${id}/employees/${employee.id}`}>
-        <a>{`${employee.lastName}, ${employee.firstName}`}</a>
-      </Link>
+        <Link href={`/company/${id}/employees/${employee.id}`}>
+          <a>
+            <StyledAvatar
+              size="large"
+              icon={<UserOutlined />}
+              src={employee.images ? employee.images.url : null}
+            />
+            {`${employee.lastName}, ${employee.firstName}`}
+          </a>
+        </Link>
     ),
     branch: `${employee.branch.branchName}`,
     renderBranch: (
-      <Link href={`/company/${id}/settings/company/branches/${employee.branch.id}`}>
+      <Link
+        href={`/company/${id}/settings/company/branches/${employee.branch.id}`}
+      >
         <a>{`${employee.branch.branchName}`}</a>
       </Link>
     ),
     phone: `${employee.phone1}`,
-    status: `${employee.currentStatus}`
+    status: `${employee.currentStatus}`,
   }));
 
   if (error || !employeesList) return <Error errorText={`${error}`} />;
@@ -89,11 +109,11 @@ export const EmployeeList = ({ id, legalBusinessName }: EmployeeListProps) => {
       key: "id",
     },
     {
-        title: "Status",
-        dataIndex: "status",
-        key: "id",
-        responsive: ["md"],
-      },
+      title: "Status",
+      dataIndex: "status",
+      key: "id",
+      responsive: ["md"],
+    },
     {
       title: "Phone",
       dataIndex: "phone",

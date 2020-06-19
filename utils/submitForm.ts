@@ -270,6 +270,14 @@ export const submitForm = (initialValues, callback) => {
     });
   };
 
+  const handleCheckBoxChange = (event) => {
+    setInputs((inputs) => {
+      const newInputs = _.cloneDeep(inputs);
+      _.set(newInputs, event.target.name, event.target.checked);
+      return newInputs;
+    });
+  };
+
   const handleDateChange = (date, dateString, id) => {
     setInputs((inputs) => {
       const newInputs = _.cloneDeep(inputs);
@@ -329,6 +337,7 @@ export const submitForm = (initialValues, callback) => {
     inputs,
     setInputs,
     handleInputChange,
+    handleCheckBoxChange,
     handleDropdownChange,
     handleDateChange,
     // handleAddIngredient,

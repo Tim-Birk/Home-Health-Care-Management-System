@@ -16,8 +16,6 @@ import { UpdateBranchProfileForm } from "../components/UpdateBranchProfileForm";
 import { Loading } from "./notify/Loading";
 import { useState } from "react";
 import styled from "styled-components";
-import Router from "next/router";
-import { UpdateCompanyProfileForm } from "./UpdateCompanyProfileForm";
 
 type CreateBranchProfileFormProps = {
   id: any;

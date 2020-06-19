@@ -1,4 +1,4 @@
-import { Row, Col, Form, Input, Dropdown, Button, DatePicker } from "antd";
+import { Row, Col, Form, Input, Dropdown, Button, DatePicker, Checkbox } from "antd";
 import * as _ from "lodash";
 import { MenuList, ObjectMenuList } from "./MenuList";
 import moment from "moment";
@@ -11,12 +11,13 @@ type objListItem = {
 
 type InputType = {
   name: string;
-  value: string;
+  value?: string;
   span: number;
   maxLength?: number;
   list?: string[];
   objList?: objListItem[];
   rules?: any;
+  checked?: boolean;
   handleInputChange?: (event: any) => void;
   handleDropdownChange?: (event: any) => void;
   handleDateChange?: (date: any, dateString: string, id: string) => void;
@@ -111,6 +112,34 @@ export const GenerateDateInput = ({
           onChange={(date, dateString) =>
           handleDateChange(date, dateString, name)
           }
+        />
+      </Form.Item>
+    </Col>
+  </Row>
+);
+
+
+export const GenerateCheckbox = ({
+  name,
+  value,
+  handleInputChange,
+  span,
+  rules,
+  checked,
+}: InputType) => (
+  <Row>
+    <Col span={span} offset={defaultOffset}>
+      <Form.Item
+        label={`${_.upperFirst(name.replace(/([a-z])([A-Z])/g, "$1 $2"))}`}
+        name={name}
+        valuePropName={name.toLowerCase()}
+        initialValue={value}
+        rules={rules}
+      >
+        <Checkbox
+          name={`${name}`}
+          checked={checked}
+          onChange={handleInputChange}
         />
       </Form.Item>
     </Col>

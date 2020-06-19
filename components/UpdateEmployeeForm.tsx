@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import * as _ from "lodash";
 import { employeeGraphQL } from "../graphql/queries/employee";
@@ -20,6 +20,7 @@ import {
   GenerateDropdown,
   GenerateDateInput,
   GenerateObjectDropdown,
+  GenerateCheckbox,
 } from "./GenerateFields";
 import styled from "styled-components";
 import { Loading } from "./notify/Loading";
@@ -140,6 +141,7 @@ export const UpdateEmployeeProfileForm = ({
     inputs,
     setInputs,
     handleInputChange,
+    handleCheckBoxChange,
     handleDropdownChange,
     handleDateChange,
     handleUpdateEmployee,
@@ -155,7 +157,7 @@ export const UpdateEmployeeProfileForm = ({
       gender: "Select",
       birthdate: null,
       social: "",
-      sharedEmployee: "",
+      sharedEmployee: false,
       earningsType: "Select",
       originalHireDate: null,
       orientationDate: null,
@@ -315,7 +317,12 @@ export const UpdateEmployeeProfileForm = ({
           span={18}
           rules={basicRequiredDropdown(currentBranch.branchName)}
         />
-
+        <GenerateCheckbox
+          name="sharedEmployee"
+          checked={inputs.sharedEmployee}
+          handleInputChange={handleCheckBoxChange}
+          span={18}
+        />
         <GenerateDateInput
           name="birthdate"
           value={inputs.birthdate}

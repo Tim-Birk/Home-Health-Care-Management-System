@@ -21,6 +21,8 @@ const StyledNameTitle = styled.h2`
   ${({ theme }) => `
   text-align: center;
   color: inherit;
+  padding-left: ${theme["padding-xsmall"]};
+  padding-right: ${theme["padding-xsmall"]};
   margin-top: ${theme["margin-small"]};
     @media ${theme.device.tablet} { 
       margin-top: ${theme["margin-xsmall"]};
