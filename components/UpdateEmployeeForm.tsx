@@ -362,7 +362,7 @@ export const UpdateEmployeeProfileForm = ({
                     return Promise.resolve();
                   }
                   return Promise.reject(
-                    "The two socials that you entered do not match!"
+                    "The two socials do not match"
                   );
                 },
               }),

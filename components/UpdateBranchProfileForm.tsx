@@ -10,6 +10,10 @@ import { submitForm } from "../utils/submitForm";
 import { Form, Col, Button } from "antd";
 import { GenerateInput, GenerateDropdown } from "./GenerateFields";
 import styled from "styled-components";
+// import {
+//   basicRequiredInput,
+//   basicRequiredDropdown,
+// } from "../utils/formValidator";
 
 type UpdateBranchProfileFormProps = {
   id: any;
@@ -103,7 +107,6 @@ export const UpdateBranchProfileForm = ({
       contactPhone: "",
       contactPhoneExt: "",
       contactEmail: "",
-      stage: "PUBLISHED",
     },
     initiateUpdateBranch
   );
@@ -116,7 +119,7 @@ export const UpdateBranchProfileForm = ({
   if (!isQueryLoading && branchState.isQueryLoading) {
     //   format data from server to match inputs object
     const { __typename, ...loadedBranch } = _.get(data, "branch", {});
-
+    
     // update inputs object to have new data
     setInputs((state) => ({ ...state, ...loadedBranch }));
 
@@ -131,12 +134,13 @@ export const UpdateBranchProfileForm = ({
       <StyledPageTitle>
         {legalBusinessName} - Branch Profile: {inputs.branchName}
       </StyledPageTitle>
-      <StyledForm name="control-ref" onSubmitCapture={handleUpdateBranch}>
+      <StyledForm name="control-ref" onFinish={handleUpdateBranch}>
         <GenerateInput
           name="branchName"
           value={inputs.branchName}
           handleInputChange={handleInputChange}
           span={18}
+          // rules={basicRequiredInput}
         />
         <GenerateInput
           name="branchCode"
@@ -155,6 +159,7 @@ export const UpdateBranchProfileForm = ({
           value={inputs.address1}
           handleInputChange={handleInputChange}
           span={8}
+          // rules={basicRequiredInput}
         />
         <GenerateInput
           name="address2"
@@ -167,6 +172,7 @@ export const UpdateBranchProfileForm = ({
           value={inputs.city}
           handleInputChange={handleInputChange}
           span={18}
+          // rules={basicRequiredInput}
         />
         <GenerateDropdown
           name="state"
@@ -174,12 +180,14 @@ export const UpdateBranchProfileForm = ({
           handleDropdownChange={handleDropdownChange}
           list={states}
           span={18}
+          // rules={basicRequiredDropdown(inputs.state)}
         />
         <GenerateInput
           name="zip"
           value={inputs.zip}
           handleInputChange={handleInputChange}
           span={8}
+          // rules={basicRequiredInput}
         />
         <GenerateInput
           name="zipExt"
@@ -192,6 +200,7 @@ export const UpdateBranchProfileForm = ({
           value={inputs.phone}
           handleInputChange={handleInputChange}
           span={12}
+          // rules={basicRequiredInput}
         />
         <GenerateInput
           name="phoneExt"
@@ -210,6 +219,7 @@ export const UpdateBranchProfileForm = ({
           value={inputs.contactName}
           handleInputChange={handleInputChange}
           span={18}
+          // rules={basicRequiredInput}
         />
         <GenerateInput
           name="contactTitle"
@@ -222,6 +232,7 @@ export const UpdateBranchProfileForm = ({
           value={inputs.contactPhone}
           handleInputChange={handleInputChange}
           span={12}
+          // rules={basicRequiredInput}
         />
         <GenerateInput
           name="contactPhoneExt"

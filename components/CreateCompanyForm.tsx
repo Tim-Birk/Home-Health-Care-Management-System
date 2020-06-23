@@ -18,6 +18,10 @@ import { Loading } from "./notify/Loading";
 import { useState } from "react";
 import styled from "styled-components";
 import Router from "next/router";
+import {
+  basicRequiredInput,
+  basicRequiredDropdown,
+} from "../utils/formValidator";
 
 type CreateCompanyProfileFormProps = {};
 
@@ -182,6 +186,7 @@ export const CreateCompanyForm = () => {
               value={inputs.legalBusinessName}
               handleInputChange={handleInputChange}
               span={18}
+              rules={basicRequiredInput}
             />
             <GenerateInput
               name="companyId"
@@ -212,6 +217,7 @@ export const CreateCompanyForm = () => {
               value={inputs.taxId}
               handleInputChange={handleInputChange}
               span={12}
+              rules={basicRequiredInput}
             />
             <GenerateInput
               name="nationalProviderIdentifier"
@@ -225,6 +231,7 @@ export const CreateCompanyForm = () => {
               handleDropdownChange={handleDropdownChange}
               list={businessType}
               span={18}
+              rules={basicRequiredDropdown(inputs.businessType)}
             />
 
             <GenerateInput
@@ -232,6 +239,7 @@ export const CreateCompanyForm = () => {
               value={inputs.address1}
               handleInputChange={handleInputChange}
               span={18}
+              rules={basicRequiredInput}
             />
             <GenerateInput
               name="address2"
@@ -244,6 +252,7 @@ export const CreateCompanyForm = () => {
               value={inputs.zip}
               handleInputChange={handleInputChange}
               span={8}
+              rules={basicRequiredInput}
             />
             <GenerateInput
               name="zipExt"
@@ -256,6 +265,7 @@ export const CreateCompanyForm = () => {
               value={inputs.city}
               handleInputChange={handleInputChange}
               span={18}
+              rules={basicRequiredInput}
             />
             <GenerateDropdown
               name="state"
@@ -263,12 +273,14 @@ export const CreateCompanyForm = () => {
               handleDropdownChange={handleDropdownChange}
               list={states}
               span={18}
+              rules={basicRequiredDropdown(inputs.state)}
             />
             <GenerateInput
               name="phone"
               value={inputs.phone}
               handleInputChange={handleInputChange}
               span={12}
+              rules={basicRequiredInput}
             />
             <GenerateInput
               name="fax"
@@ -281,6 +293,7 @@ export const CreateCompanyForm = () => {
               value={inputs.contactName}
               handleInputChange={handleInputChange}
               span={18}
+              rules={basicRequiredInput}
             />
             <GenerateInput
               name="contactTitle"
@@ -293,6 +306,7 @@ export const CreateCompanyForm = () => {
               value={inputs.contactPhone}
               handleInputChange={handleInputChange}
               span={12}
+              rules={basicRequiredInput}
             />
             <GenerateInput
               name="contactExt"
@@ -305,6 +319,7 @@ export const CreateCompanyForm = () => {
               value={inputs.contactEmail}
               handleInputChange={handleInputChange}
               span={18}
+              rules={basicRequiredInput}
             />
 
             <Col span={6} offset={3}>

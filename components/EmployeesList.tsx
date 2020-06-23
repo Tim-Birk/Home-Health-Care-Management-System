@@ -1,14 +1,14 @@
 import { useQuery } from "@apollo/react-hooks";
 import * as _ from "lodash";
-import { employeesGraphQL } from "../../graphql/queries/employees";
+import { employeesGraphQL } from "../graphql/queries/employees";
 import { Table, Button, Col, Avatar } from "antd";
 import styled from "styled-components";
-import { Loading } from "../notify/Loading";
-import { Error } from "../notify/Error";
-import { Warning } from "../notify/Warning";
+import { Loading } from "./notify/Loading";
+import { Error } from "./notify/Error";
+import { Warning } from "./notify/Warning";
 import { ColumnsType } from "antd/lib/table";
 import Link from "next/link";
-import { UserOutlined } from "@ant-design/icons";
+import { UserOutlined, CheckCircleOutlined } from "@ant-design/icons";
 
 type EmployeeListProps = {
   id: any;
@@ -40,6 +40,19 @@ const StyledAvatar = styled(Avatar)`
     `}
 `;
 
+const StyledTable = styled(Table)`
+  ${({ theme }) => `
+        max-width: 1800px
+    `}
+`;
+
+const StyledCheck = styled(CheckCircleOutlined)`
+  ${({ theme }) => `
+        // margin: auto;
+        text-align: center;
+    `}
+`;
+
 export const EmployeeList = ({ id, legalBusinessName }: EmployeeListProps) => {
   const { loading: isQueryLoading, data, error } = useQuery(employeesGraphQL, {
     variables: { where: { company: { id } } },
@@ -53,16 +66,16 @@ export const EmployeeList = ({ id, legalBusinessName }: EmployeeListProps) => {
     ...employee,
     key: employee.id,
     renderEmployee: (
-        <Link href={`/company/${id}/employees/${employee.id}`}>
-          <a>
-            <StyledAvatar
-              size="large"
-              icon={<UserOutlined />}
-              src={employee.images ? employee.images.url : null}
-            />
-            {`${employee.lastName}, ${employee.firstName}`}
-          </a>
-        </Link>
+      <Link href={`/company/${id}/employees/${employee.id}`}>
+        <a>
+          <StyledAvatar
+            size="large"
+            icon={<UserOutlined />}
+            src={employee.images ? employee.images.url : null}
+          />
+          {`${employee.lastName}, ${employee.firstName}`}
+        </a>
+      </Link>
     ),
     branch: `${employee.branch.branchName}`,
     renderBranch: (
@@ -72,12 +85,15 @@ export const EmployeeList = ({ id, legalBusinessName }: EmployeeListProps) => {
         <a>{`${employee.branch.branchName}`}</a>
       </Link>
     ),
+    shared: employee.sharedEmployee ? <StyledCheck /> : null,
     phone: `${employee.phone1}`,
     status: `${employee.currentStatus}`,
   }));
 
-  if (error || !employeesList) return <Error errorText={`${error}`} />;
-  if (employeesList.length === 0)
+  const sortedEmployeesList = _.sortBy(employeesList, ["branch", "lastName"]);
+
+  if (error || !sortedEmployeesList) return <Error errorText={`${error}`} />;
+  if (sortedEmployeesList.length === 0)
     return (
       <>
         <StyledNewButton block type="primary">
@@ -109,6 +125,13 @@ export const EmployeeList = ({ id, legalBusinessName }: EmployeeListProps) => {
       key: "id",
     },
     {
+      title: "Shared",
+      dataIndex: "shared",
+      key: "id",
+      align: "center",
+      responsive: ["md"],
+    },
+    {
       title: "Status",
       dataIndex: "status",
       key: "id",
@@ -132,7 +155,11 @@ export const EmployeeList = ({ id, legalBusinessName }: EmployeeListProps) => {
           </Link>
         </StyledNewButton>
       </Col>
-      <Table columns={columns} dataSource={employeesList} />
+      <StyledTable
+        columns={columns}
+        dataSource={sortedEmployeesList}
+        pagination={{ position: ["topLeft", "bottomRight"] }}
+      />
     </>
   );
 };

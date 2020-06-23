@@ -14,7 +14,7 @@ export const submitForm = (initialValues, callback) => {
   const [inputs, setInputs] = useState(initialValues);
 
   const handleUpdateCompany = async (event) => {
-    if (event) event.preventDefault();
+    // if (event) event.preventDefault();
     const company = await callback();
     const {
       id,
@@ -40,7 +40,6 @@ export const submitForm = (initialValues, callback) => {
       contactExt,
       contactEmail,
       owner,
-      stage,
     } = company;
     setInputs(() => ({
       id,
@@ -66,13 +65,12 @@ export const submitForm = (initialValues, callback) => {
       contactExt,
       contactEmail,
       owner,
-      stage,
     }));
   };
 
   const handleUpdateBranch = async (event) => {
-    if (event) event.preventDefault();
-    const company = await callback();
+    // if (event) event.preventDefault();
+    const branch = await callback();
     const {
       id,
       branchName,
@@ -92,8 +90,7 @@ export const submitForm = (initialValues, callback) => {
       contactPhone,
       contactPhoneExt,
       contactEmail,
-      stage,
-    } = company;
+    } = branch;
     setInputs(() => ({
       id,
       branchName,
@@ -113,7 +110,6 @@ export const submitForm = (initialValues, callback) => {
       contactPhone,
       contactPhoneExt,
       contactEmail,
-      stage,
     }));
   };
 

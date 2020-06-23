@@ -14,6 +14,10 @@ import styled from "styled-components";
 import { Loading } from "./notify/Loading";
 import { Error } from "./notify/Error";
 import Router from "next/router";
+import {
+  basicRequiredInput,
+  basicRequiredDropdown,
+} from "../utils/formValidator";
 
 type UpdateCompanyProfileFormProps = {
   id: any;
@@ -106,8 +110,7 @@ export const UpdateCompanyProfileForm = ({
       contactName: "",
       contactTitle: "",
       contactPhone: "",
-      contactEmail: "",
-      stage: "PUBLISHED",
+      contactEmail: ""
     },
     initiateUpdateCompany
   );
@@ -152,12 +155,13 @@ export const UpdateCompanyProfileForm = ({
       <StyledPageTitle>
         {data.company.legalBusinessName} - Company Profile
       </StyledPageTitle>
-      <StyledForm name="control-ref" onSubmitCapture={handleUpdateCompany}>
+      <StyledForm name="control-ref" onFinish={handleUpdateCompany}>
         <GenerateInput
           name="legalBusinessName"
           value={inputs.legalBusinessName}
           handleInputChange={handleInputChange}
           span={18}
+          rules={basicRequiredInput}
         />
         <GenerateInput
           name="companyId"
@@ -188,6 +192,7 @@ export const UpdateCompanyProfileForm = ({
           value={inputs.taxId}
           handleInputChange={handleInputChange}
           span={12}
+          rules={basicRequiredInput}
         />
         <GenerateInput
           name="nationalProviderIdentifier"
@@ -201,6 +206,7 @@ export const UpdateCompanyProfileForm = ({
           handleDropdownChange={handleDropdownChange}
           list={businessType}
           span={18}
+          rules={basicRequiredDropdown(inputs.businessType)}
         />
 
         <GenerateInput
@@ -208,6 +214,7 @@ export const UpdateCompanyProfileForm = ({
           value={inputs.address1}
           handleInputChange={handleInputChange}
           span={18}
+          rules={basicRequiredInput}
         />
         <GenerateInput
           name="address2"
@@ -220,6 +227,7 @@ export const UpdateCompanyProfileForm = ({
           value={inputs.zip}
           handleInputChange={handleInputChange}
           span={8}
+          rules={basicRequiredInput}
         />
         <GenerateInput
           name="zipExt"
@@ -232,6 +240,7 @@ export const UpdateCompanyProfileForm = ({
           value={inputs.city}
           handleInputChange={handleInputChange}
           span={18}
+          rules={basicRequiredInput}
         />
         <GenerateDropdown
           name="state"
@@ -239,12 +248,14 @@ export const UpdateCompanyProfileForm = ({
           handleDropdownChange={handleDropdownChange}
           list={states}
           span={18}
+          rules={basicRequiredDropdown(inputs.state)}
         />
         <GenerateInput
           name="phone"
           value={inputs.phone}
           handleInputChange={handleInputChange}
           span={12}
+          rules={basicRequiredInput}
         />
         <GenerateInput
           name="fax"
@@ -257,6 +268,7 @@ export const UpdateCompanyProfileForm = ({
           value={inputs.contactName}
           handleInputChange={handleInputChange}
           span={18}
+          rules={basicRequiredInput}
         />
         <GenerateInput
           name="contactTitle"
@@ -269,6 +281,7 @@ export const UpdateCompanyProfileForm = ({
           value={inputs.contactPhone}
           handleInputChange={handleInputChange}
           span={12}
+          rules={basicRequiredInput}
         />
         <GenerateInput
           name="contactExt"
@@ -281,6 +294,7 @@ export const UpdateCompanyProfileForm = ({
           value={inputs.contactEmail}
           handleInputChange={handleInputChange}
           span={18}
+          rules={basicRequiredInput}
         />
 
         <Col span={6} offset={3}>

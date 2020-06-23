@@ -8,6 +8,21 @@ import { Error } from "./notify/Error";
 import { Loading } from "./notify/Loading";
 import { Warning } from "./notify/Warning";
 import { CompanyListItem } from "./CompanyListItem";
+import styled from "styled-components"
+
+const StyledCompanyList = styled(Row)`
+  ${({ theme }) => `
+        display: flex;
+        justify-content: center;
+        margin: 0 ${theme["margin-medium"]};
+
+        @media ${theme.device.tablet} { 
+          justify-content: flex-start;
+          
+          
+        }
+    `}
+`;
 
 export enum queryEnum {
   userCompanies = "userCompanies",
@@ -45,7 +60,7 @@ export const CompaniesList = ({
     );
 
   return (
-    <Row>
+    <StyledCompanyList>
       {companiesList.map((company: Company) => (
         <CompanyListItem
           company={company}
@@ -53,6 +68,6 @@ export const CompaniesList = ({
           parentRoute={parentRoute}
         />
       ))}
-    </Row>
+    </StyledCompanyList>
   );
 };

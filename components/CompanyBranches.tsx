@@ -103,7 +103,11 @@ export const CompanyBranches = ({
           </Link>
         </StyledNewBranchButton>
       </Col>
-      <Table columns={columns} dataSource={branchesList} />
+      <Table
+        columns={columns}
+        dataSource={branchesList}
+        pagination={{ position: ["topLeft", "bottomRight"] }}
+      />
     </>
   );
 };

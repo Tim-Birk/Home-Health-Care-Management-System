@@ -1,8 +1,19 @@
-import { Row, Col, Form, Input, Dropdown, Button, DatePicker, Checkbox } from "antd";
+import {
+  Row,
+  Col,
+  Form,
+  Input,
+  Dropdown,
+  Button,
+  DatePicker,
+  Checkbox,
+} from "antd";
 import * as _ from "lodash";
 import { MenuList, ObjectMenuList } from "./MenuList";
 import moment from "moment";
 import { getDateFormat, formatSS } from "../utils/format";
+import { useState } from "react";
+import { states } from "../utils/staticLists";
 
 type objListItem = {
   id: string;
@@ -31,7 +42,7 @@ export const GenerateInput = ({
   handleInputChange,
   span,
   rules,
-  maxLength
+  maxLength,
 }: InputType) => (
   <Row>
     <Col span={span} offset={defaultOffset}>
@@ -62,30 +73,32 @@ export const GeneratePasswordInput = ({
   handleInputChange,
   span,
   rules,
-  maxLength
+  maxLength,
 }: InputType) => {
-  return (<Row>
-    <Col span={span} offset={defaultOffset}>
-      <Form.Item
-        label={`${_.upperFirst(name.replace(/([a-z])([A-Z])/g, "$1 $2"))}`}
-        name={name}
-        valuePropName={name.toLowerCase()}
-        initialValue={value}
-        rules={rules}
-      >
-        <Input.Password
-          placeholder={`${_.upperFirst(
-            name.replace(/([a-z])([A-Z])/g, "$1 $2")
-          )}`}
-          name={`${name}`}
-          value={value}
-          onChange={handleInputChange}
-          maxLength={maxLength}
-        />
-      </Form.Item>
-    </Col>
-  </Row>
-)};
+  return (
+    <Row>
+      <Col span={span} offset={defaultOffset}>
+        <Form.Item
+          label={`${_.upperFirst(name.replace(/([a-z])([A-Z])/g, "$1 $2"))}`}
+          name={name}
+          valuePropName={name.toLowerCase()}
+          initialValue={value}
+          rules={rules}
+        >
+          <Input.Password
+            placeholder={`${_.upperFirst(
+              name.replace(/([a-z])([A-Z])/g, "$1 $2")
+            )}`}
+            name={`${name}`}
+            value={value}
+            onChange={handleInputChange}
+            maxLength={maxLength}
+          />
+        </Form.Item>
+      </Col>
+    </Row>
+  );
+};
 
 const dateFormat = "MM/DD/YYYY";
 
@@ -110,14 +123,13 @@ export const GenerateDateInput = ({
           value={getDateFormat(value)}
           format={dateFormat}
           onChange={(date, dateString) =>
-          handleDateChange(date, dateString, name)
+            handleDateChange(date, dateString, name)
           }
         />
       </Form.Item>
     </Col>
   </Row>
 );
-
 
 export const GenerateCheckbox = ({
   name,
@@ -171,31 +183,43 @@ export const GenerateDropdown = ({
   list,
   handleDropdownChange,
   rules,
-}: InputType) => (
-  <Row>
-    <Col span={12} offset={defaultOffset}>
-      <Form.Item
-        label={`${_.upperFirst(name.replace(/([a-z])([A-Z])/g, "$1 $2"))}`}
-        name={name}
-        rules={rules}
-        initialValue={value}
-      >
-        <Dropdown
-          overlay={
-            <MenuList
-              iterableList={list}
-              name={name}
-              handleDropdownChange={handleDropdownChange}
-            />
-          }
-          placement="bottomLeft"
+}: InputType) => {
+  const [menuState, SetMenuState] = useState({ visible: false });
+  const onClick = ({ key }) => {
+    SetMenuState((state) => ({ ...state, visible: !state.visible }));
+  };
+  const handleVisibleChange = (flag) => {
+    SetMenuState((state) => ({ ...state, visible: flag }));
+  };
+  return (
+    <Row>
+      <Col span={12} offset={defaultOffset}>
+        <Form.Item
+          label={`${_.upperFirst(name.replace(/([a-z])([A-Z])/g, "$1 $2"))}`}
+          name={name}
+          rules={rules}
+          initialValue={value}
         >
-          <Button>{value}</Button>
-        </Dropdown>
-      </Form.Item>
-    </Col>
-  </Row>
-);
+          <Dropdown
+            visible={menuState.visible}
+            onVisibleChange={handleVisibleChange}
+            overlay={
+              <MenuList
+                iterableList={list}
+                name={name}
+                handleDropdownChange={handleDropdownChange}
+                handleMenuClick={onClick}
+              />
+            }
+            placement="bottomLeft"
+          >
+            <Button>{value}</Button>
+          </Dropdown>
+        </Form.Item>
+      </Col>
+    </Row>
+  );
+};
 
 export const GenerateObjectDropdown = ({
   name,
@@ -203,28 +227,41 @@ export const GenerateObjectDropdown = ({
   objList,
   handleDropdownChange,
   rules,
-}: InputType) => (
-  <Row>
-    <Col span={12} offset={defaultOffset}>
-      <Form.Item
-        label={`${_.upperFirst(name.replace(/([a-z])([A-Z])/g, "$1 $2"))}`}
-        name={name}
-        rules={rules}
-        initialValue={value}
-      >
-        <Dropdown
-          overlay={
-            <ObjectMenuList
-              iterableList={objList}
-              name={name}
-              handleDropdownChange={handleDropdownChange}
-            />
-          }
-          placement="bottomLeft"
+}: InputType) => {
+  const [menuState, SetMenuState] = useState({ visible: false });
+  const onClick = ({ key }) => {
+    SetMenuState((state) => ({ ...state, visible: !state.visible }));
+  };
+  const handleVisibleChange = (flag) => {
+    SetMenuState((state) => ({ ...state, visible: flag }));
+  };
+
+  return (
+    <Row>
+      <Col span={12} offset={defaultOffset}>
+        <Form.Item
+          label={`${_.upperFirst(name.replace(/([a-z])([A-Z])/g, "$1 $2"))}`}
+          name={name}
+          rules={rules}
+          initialValue={value}
         >
-          <Button>{value}</Button>
-        </Dropdown>
-      </Form.Item>
-    </Col>
-  </Row>
-);
+          <Dropdown
+            visible={menuState.visible}
+            onVisibleChange={handleVisibleChange}
+            overlay={
+              <ObjectMenuList
+                iterableList={objList}
+                name={name}
+                handleDropdownChange={handleDropdownChange}
+                handleMenuClick={onClick}
+              />
+            }
+            placement="bottomLeft"
+          >
+            <Button>{value}</Button>
+          </Dropdown>
+        </Form.Item>
+      </Col>
+    </Row>
+  );
+};

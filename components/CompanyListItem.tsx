@@ -7,7 +7,8 @@ import { Card } from "antd";
 
 const StyledCompany = styled(Col)`
   ${({ theme }) => `
-        padding: 0px ${theme["padding-small"]};
+        max-width: 375px;
+        padding: 0px ${theme["padding-xsmall"]};
         .ant-card {
             margin-bottom: .75rem;
         }

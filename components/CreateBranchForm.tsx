@@ -16,6 +16,10 @@ import { UpdateBranchProfileForm } from "../components/UpdateBranchProfileForm";
 import { Loading } from "./notify/Loading";
 import { useState } from "react";
 import styled from "styled-components";
+import {
+  basicRequiredInput,
+  basicRequiredDropdown,
+} from "../utils/formValidator";
 
 type CreateBranchProfileFormProps = {
   id: any;

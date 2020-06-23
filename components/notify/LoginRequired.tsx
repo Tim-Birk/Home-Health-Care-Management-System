@@ -6,7 +6,8 @@ import { Button } from "antd";
 const StyledCol = styled(Col)`
   ${({ theme }) => `
   text-align: center;
-  margin-top: 200px;
+  margin-top: 225px;
+  max-width: 800px;
   .messageContainer {
       border: 1px solid black;
       border-radius: 0.5em;
