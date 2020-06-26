@@ -61,11 +61,15 @@ export const EmployeeList = ({
   legalBusinessName,
   branches,
 }: EmployeeListProps) => {
-  const [search, setSearch] = useState({ searchText: "", searchedColumn: "" });
   const [filter, setFilter] = useState({
     filteredInfo: null,
     sortedInfo: null,
   });
+  const [employeeListInfo, setEmployeeListInfo] = useState({
+    isInitialized: true,
+    employeeList: [],
+  });
+  const [search, setSearch] = useState({ searchText: "", searchedColumn: "" });
   const { loading: isQueryLoading, data, error } = useQuery(employeesGraphQL, {
     variables: { where: { company: { id } } },
   });
@@ -138,8 +142,8 @@ export const EmployeeList = ({
         setTimeout(() => searchInput.select());
       }
     },
-    render: (text) =>
-      search.searchedColumn === dataIndex ? (
+    render: (text) => {
+      return search.searchedColumn === dataIndex ? (
         <Highlighter
           highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
           searchWords={[search.searchText]}
@@ -148,7 +152,8 @@ export const EmployeeList = ({
         />
       ) : (
         text
-      ),
+      );
+    },
   });
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -156,25 +161,35 @@ export const EmployeeList = ({
     if (dataIndex === "renderEmployee") {
       searchIndex = "name";
     }
-    confirm();
-    setSearch((state) => ({
+
+    setEmployeeListInfo((state) => ({
       ...state,
-      searchText: selectedKeys[0],
-      searchedColumn: searchIndex,
+      isInitialized: false,
+      employeeList: [
+        ...(sortedEmployeesList = sortedEmployeesList.filter((employee) => {
+          if (
+            searchIndex === "name" && employee.name.toUpperCase().includes(selectedKeys[0].toUpperCase())
+          ) {
+            return employee;
+          }
+        })),
+      ],
     }));
   };
 
   const handleReset = (clearFilters) => {
     clearFilters();
-    setSearch((state) => ({
+    // setSearch((state) => ({
+    //   ...state,
+    //   searchText: "",
+    // }));
+    setEmployeeListInfo((state) => ({
       ...state,
-      searchText: "",
+      employeeList: [...sortedEmployeesList],
     }));
   };
 
   const handleChange = (pagination, filters, sorter) => {
-    // console.log("Various parameters", pagination, filters, sorter);
-
     setFilter((state) => ({
       ...state,
       filteredInfo: filters,
@@ -182,65 +197,50 @@ export const EmployeeList = ({
     }));
   };
 
-  const clearFilters = () => {
-    this.setState({ filteredInfo: null });
-    setFilter((state) => ({
-      ...state,
-      filteredInfo: null,
-    }));
-  };
-
-  const clearAll = () => {
-    setFilter((state) => ({
-      ...state,
-      filteredInfo: null,
-      sortedInfo: null,
-    }));
-  };
-
   let employeesList = _.map(data.employees, (value) =>
     _.get(value, "employees", value)
   ).map((employee) => {
-    let statusBadge = {}
+    let statusBadge = {};
     if (employee.currentStatus === "Active") {
-        statusBadge = <Badge status="success" text={employee.currentStatus} />;
-      } else if (employee.currentStatus === "Pending") {
-        statusBadge = <Badge status="warning" text={employee.currentStatus} />;
-      } else {
-        statusBadge = <Badge status="error" text={employee.currentStatus} />;
-      }
+      statusBadge = <Badge status="success" text={employee.currentStatus} />;
+    } else if (employee.currentStatus === "Pending") {
+      statusBadge = <Badge status="warning" text={employee.currentStatus} />;
+    } else {
+      statusBadge = <Badge status="error" text={employee.currentStatus} />;
+    }
     return {
-    ...employee,
-    key: employee.id,
-    name: `${employee.lastName}, ${employee.firstName}`,
-    renderEmployee: (
-      <Link href={`/company/${id}/employees/${employee.id}`}>
-        <a>
-          <StyledAvatar
-            size="large"
-            icon={<UserOutlined />}
-            src={employee.images ? employee.images.url : null}
-          />
-          {`${employee.lastName}, ${employee.firstName}`}
-        </a>
-      </Link>
-    ),
-    branch: `${employee.branch.branchName}`,
-    renderBranch: (
-      <Link
-        href={`/company/${id}/settings/company/branches/${employee.branch.id}`}
-      >
-        <a>{`${employee.branch.branchName}`}</a>
-      </Link>
-    ),
-    shared: employee.sharedEmployee,
-    renderShared: employee.sharedEmployee ? <StyledCheck /> : null,
-    phone: `${employee.phone1}`,
-    status: `${employee.currentStatus}`,
-    renderStatus: statusBadge
-  }});
+      ...employee,
+      key: employee.id,
+      name: `${employee.lastName}, ${employee.firstName}`,
+      renderEmployee: (
+        <Link href={`/company/${id}/employees/${employee.id}`}>
+          <a>
+            <StyledAvatar
+              size="large"
+              icon={<UserOutlined />}
+              src={employee.images ? employee.images.url : null}
+            />
+            {`${employee.lastName}, ${employee.firstName}`}
+          </a>
+        </Link>
+      ),
+      branch: `${employee.branch.branchName}`,
+      renderBranch: (
+        <Link
+          href={`/company/${id}/settings/company/branches/${employee.branch.id}`}
+        >
+          <a>{`${employee.branch.branchName}`}</a>
+        </Link>
+      ),
+      shared: employee.sharedEmployee,
+      renderShared: employee.sharedEmployee ? <StyledCheck /> : null,
+      phone: `${employee.phone1}`,
+      status: `${employee.currentStatus}`,
+      renderStatus: statusBadge,
+    };
+  });
 
-  const sortedEmployeesList = _.sortBy(employeesList, ["branch", "lastName"]);
+  let sortedEmployeesList = _.sortBy(employeesList, ["branch", "lastName"]);
 
   if (error || !sortedEmployeesList) return <Error errorText={`${error}`} />;
   if (sortedEmployeesList.length === 0)
@@ -266,6 +266,7 @@ export const EmployeeList = ({
     key: "name";
     title: "Name";
     dataIndex: "name";
+    name: "name";
     branch: "branch";
     status: "status";
     shared: "shared";
@@ -274,7 +275,7 @@ export const EmployeeList = ({
     {
       title: "Employee",
       dataIndex: "renderEmployee",
-      key: "id",
+      key: "name",
       ...getColumnSearchProps("renderEmployee"),
     },
     {
@@ -331,7 +332,7 @@ export const EmployeeList = ({
       </Col>
       <StyledTable
         columns={columns}
-        dataSource={sortedEmployeesList}
+        dataSource={employeeListInfo.isInitialized ? sortedEmployeesList : employeeListInfo.employeeList}
         pagination={{ position: ["topLeft", "bottomRight"] }}
         onChange={handleChange}
       />
