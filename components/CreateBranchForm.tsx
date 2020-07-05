@@ -1,25 +1,32 @@
-import { Form, Row, Col, Button, Alert, Result } from "antd";
+import { Col, Alert } from "antd";
+import { Formik } from "formik";
+import { Form, SubmitButton, ResetButton } from "formik-antd";
 import * as _ from "lodash";
 import { submitForm } from "../utils/submitForm";
-import {
-  GenerateInput,
-  GenerateTextInput,
-  GenerateDropdown,
-} from "./GenerateFields";
 import { useFetchUser } from "../utils/user";
 import { useMutation } from "@apollo/react-hooks";
 import { createBranchGraphQL } from "../graphql/mutations/createBranch";
 import { publishBranchGraphQL } from "../graphql/mutations/publishBranch";
 import { states } from "../utils/staticLists";
-// import { recipesGraphQL } from "../graphql/queries/recipes";
-import { UpdateBranchProfileForm } from "../components/UpdateBranchProfileForm";
+import { UpdateBranchProfileForm } from "./UpdateBranchProfileForm";
 import { Loading } from "./notify/Loading";
 import { useState } from "react";
 import styled from "styled-components";
 import {
-  basicRequiredInput,
-  basicRequiredDropdown,
-} from "../utils/formValidator";
+  GenerateInput,
+  GenerateCustomInput,
+  GenerateDropdown,
+} from "./GenerateFormikFields";
+import * as Yup from "yup";
+import {
+  phoneNumberMask,
+  phoneRegExp,
+  zipMask,
+  zipRegExp,
+  zipExtRegExp,
+  zipExtMask,
+  phoneExtMask,
+} from "../utils/inputMasks";
 
 type CreateBranchProfileFormProps = {
   id: any;
@@ -46,6 +53,12 @@ const StyledForm = styled(Form)`
     `}
 `;
 
+const StyledResetButton = styled(ResetButton)`
+  ${({ theme }) => `
+        margin-left: ${theme["margin-xsmall"]};
+    `}
+`;
+
 export const CreateBranchForm = ({
   id,
   legalBusinessName,
@@ -56,29 +69,20 @@ export const CreateBranchForm = ({
     publishBranchMutation,
     { loading: publishBranchLoading },
   ] = useMutation(publishBranchGraphQL);
-  //   const { user, loading: isFetchingUser } = useFetchUser();
-
-  //   const [recipeState, setRecipeState] = useState({
-  //     isPicUploading: false,
-  //   });
-
-  //   const owner = _.get(user, "sub") || "";
 
   const [isBranchAdded, setIsBranchAdded] = useState(false);
 
-  const initiateCreateBranch = async () => {
+  const initiateCreateBranch = async (values) => {
     const result = await createBranchMutation({
-      // refetchQueries: [
-      //   { query: branchGraphQL, variables: { where: { id: result.id } } },
-      // ],
       variables: {
         data: {
-          ...inputs,
+          ...values,
         },
       },
     });
 
     const { createBranch } = result.data;
+
     setInputs({ ...createBranch });
     await publishBranchMutation({
       variables: {
@@ -86,7 +90,6 @@ export const CreateBranchForm = ({
       },
     });
     setIsBranchAdded(true);
-    // Router.push(`/company/${id}/settings/company/branches/${createBranch.id}`);
   };
 
   const {
@@ -122,6 +125,7 @@ export const CreateBranchForm = ({
   if (loading || publishBranchLoading) return <Loading />;
 
   const disabled = loading || publishBranchLoading || isBranchAdded;
+
   return (
     <>
       {isBranchAdded ? (
@@ -139,122 +143,184 @@ export const CreateBranchForm = ({
       ) : (
         <>
           <StyledPageTitle>{legalBusinessName} - Create Branch</StyledPageTitle>
-          <StyledForm name="control-ref" onFinish={handleSubmit}>
-            <GenerateInput
-              name="branchName"
-              value={inputs.branchName}
-              handleInputChange={handleInputChange}
-              span={18}
-            />
-            <GenerateInput
-              name="branchCode"
-              value={inputs.branchCode}
-              handleInputChange={handleInputChange}
-              span={12}
-            />
-            <GenerateInput
-              name="abbreviation"
-              value={inputs.abbreviation}
-              handleInputChange={handleInputChange}
-              span={18}
-            />
-            <GenerateInput
-              name="address1"
-              value={inputs.address1}
-              handleInputChange={handleInputChange}
-              span={18}
-            />
-            <GenerateInput
-              name="address2"
-              value={inputs.address2}
-              handleInputChange={handleInputChange}
-              span={18}
-            />
-            <GenerateInput
-              name="city"
-              value={inputs.city}
-              handleInputChange={handleInputChange}
-              span={18}
-            />
-            <GenerateDropdown
-              name="state"
-              value={inputs.state}
-              handleDropdownChange={handleDropdownChange}
-              list={states}
-              span={18}
-            />
-            <GenerateInput
-              name="zip"
-              value={inputs.zip}
-              handleInputChange={handleInputChange}
-              span={8}
-            />
-            <GenerateInput
-              name="zipExt"
-              value={inputs.zipExt}
-              handleInputChange={handleInputChange}
-              span={8}
-            />
-            <GenerateInput
-              name="phone"
-              value={inputs.phone}
-              handleInputChange={handleInputChange}
-              span={12}
-            />
-            <GenerateInput
-              name="phoneExt"
-              value={inputs.phoneExt}
-              handleInputChange={handleInputChange}
-              span={12}
-            />
-            <GenerateInput
-              name="fax"
-              value={inputs.fax}
-              handleInputChange={handleInputChange}
-              span={12}
-            />
-            <GenerateInput
-              name="contactName"
-              value={inputs.contactName}
-              handleInputChange={handleInputChange}
-              span={18}
-            />
-            <GenerateInput
-              name="contactTitle"
-              value={inputs.contactTitle}
-              handleInputChange={handleInputChange}
-              span={18}
-            />
-            <GenerateInput
-              name="contactPhone"
-              value={inputs.contactPhone}
-              handleInputChange={handleInputChange}
-              span={12}
-            />
-            <GenerateInput
-              name="contactPhoneExt"
-              value={inputs.contactPhoneExt}
-              handleInputChange={handleInputChange}
-              span={8}
-            />
-            <GenerateInput
-              name="contactEmail"
-              value={inputs.contactEmail}
-              handleInputChange={handleInputChange}
-              span={18}
-            />
+          <Formik
+            initialValues={{
+              branchName: "",
+              branchCode: "",
+              abbreviation: "",
+              address1: "",
+              address2: "",
+              city: "",
+              state: "Select",
+              zip: "",
+              zipExt: "",
+              phone: "",
+              phoneExt: "",
+              fax: "",
+              contactName: "",
+              contactTitle: "",
+              contactPhone: "",
+              contactPhoneExt: "",
+              contactEmail: "",
+              company: { connect: { id: id } },
+            }}
+            validationSchema={Yup.object({
+              branchName: Yup.string().required("Required"),
+              address1: Yup.string().required("Required"),
+              city: Yup.string().required("Required"),
+              state: Yup.string().test("select", "Required", (value) => {
+                return value !== "Select" && value;
+              }),
+              zip: Yup.string()
+                .matches(zipRegExp, "Zip is not valid")
+                .required("Required"),
+              zipExt: Yup.string()
+                .matches(zipExtRegExp, "Zip Extension is not valid"),
+              phone: Yup.string()
+                .matches(phoneRegExp, "Number is not valid")
+                .required("Required"),
+              fax: Yup.string().matches(phoneRegExp, "Number is not valid"),
+              contactName: Yup.string().required("Required"),
+              contactPhone: Yup.string()
+                .matches(phoneRegExp, "Number is not valid")
+                .required("Required"),
+              contactEmail: Yup.string()
+                .email("Invalid email address")
+                .required("Required"),
+            })}
+            onSubmit={(values, { setSubmitting }) => {
+              setTimeout(() => {
+                initiateCreateBranch(values);
+                setSubmitting(false);
+              }, 400);
+            }}
+            enableReinitialize={true}
+          >
+            {(props) => {
+              const {
+                values,
+                touched,
+                errors,
+                dirty,
+                isSubmitting,
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                handleReset,
+                setFieldValue,
+              } = props;
+              return (
+                <StyledForm>
+                  <GenerateInput name="branchName" span={18} />
+                  <GenerateInput name="branchCode" span={12} />
+                  <GenerateInput name="abbreviation" span={6} />
+                  <GenerateInput name="address1" span={18} />
+                  <GenerateInput name="address2" span={18} />
+                  <GenerateInput name="city" span={18} />
+                  <GenerateDropdown
+                    name="state"
+                    value={inputs.state}
+                    handleDropdownChange={handleDropdownChange}
+                    list={states}
+                    span={6}
+                  />
+                  <GenerateCustomInput
+                    name="zip"
+                    span={8}
+                    handleChange={handleChange}
+                    handleBlur={handleBlur}
+                    errors={errors}
+                    touched={touched}
+                    mask={zipMask}
+                    value={values.zip}
+                    setFieldValue={setFieldValue}
+                  />
+                  <GenerateCustomInput
+                    name="zipExt"
+                    span={8}
+                    handleChange={handleChange}
+                    handleBlur={handleBlur}
+                    errors={errors}
+                    touched={touched}
+                    mask={zipExtMask}
+                    value={values.zipExt}
+                    setFieldValue={setFieldValue}
+                  />
+                  <GenerateCustomInput
+                    name="phone"
+                    span={12}
+                    handleChange={handleChange}
+                    handleBlur={handleBlur}
+                    errors={errors}
+                    touched={touched}
+                    mask={phoneNumberMask}
+                    value={values.phone}
+                    setFieldValue={setFieldValue}
+                  />
+                  <GenerateCustomInput
+                    name="phoneExt"
+                    span={8}
+                    handleChange={handleChange}
+                    handleBlur={handleBlur}
+                    errors={errors}
+                    touched={touched}
+                    mask={phoneExtMask}
+                    value={values.phoneExt}
+                    setFieldValue={setFieldValue}
+                  />
+                  <GenerateCustomInput
+                    name="fax"
+                    span={12}
+                    handleChange={handleChange}
+                    handleBlur={handleBlur}
+                    errors={errors}
+                    touched={touched}
+                    mask={phoneNumberMask}
+                    value={values.fax}
+                    setFieldValue={setFieldValue}
+                  />
+                  <GenerateInput name="contactName" span={18} />
+                  <GenerateInput name="contactTitle" span={18} />
+                  <GenerateCustomInput
+                    name="contactPhone"
+                    span={12}
+                    handleChange={handleChange}
+                    handleBlur={handleBlur}
+                    errors={errors}
+                    touched={touched}
+                    mask={phoneNumberMask}
+                    value={values.contactPhone}
+                    setFieldValue={setFieldValue}
+                  />
+                  <GenerateCustomInput
+                    name="contactPhoneExt"
+                    span={8}
+                    handleChange={handleChange}
+                    handleBlur={handleBlur}
+                    errors={errors}
+                    touched={touched}
+                    mask={phoneExtMask}
+                    value={values.contactPhoneExt}
+                    setFieldValue={setFieldValue}
+                  />
+                  <GenerateInput name="contactEmail" span={18} />
 
-            <Col span={6} offset={3}>
-              <Button
-                block
-                disabled={disabled}
-                type="primary"
-                htmlType="submit"
-              >
-                Create
-              </Button>
-            </Col>
-          </StyledForm>
+                  <Col span={18} offset={1}>
+                    <SubmitButton disabled={disabled} type="primary">
+                      Save
+                    </SubmitButton>
+                    <StyledResetButton
+                      disabled={disabled}
+                      type="primary"
+                      danger
+                    >
+                      Reset
+                    </StyledResetButton>
+                  </Col>
+                </StyledForm>
+              );
+            }}
+          </Formik>
         </>
       )}
     </>

@@ -1,32 +1,40 @@
-import { Form, Col, Button, Alert } from "antd";
+import { Col, Alert } from "antd";
+import { Formik } from "formik";
+import { Form, SubmitButton, ResetButton } from "formik-antd";
 import * as _ from "lodash";
 import { submitForm } from "../utils/submitForm";
 import {
   GenerateInput,
+  GenerateCustomInput,
   GeneratePasswordInput,
   GenerateDropdown,
   GenerateDateInput,
-  GenerateObjectDropdown,
   GenerateCheckbox,
+  GenerateObjectDropdown,
+} from "./GenerateFormikFields";
+import {
+  GeneratePasswordInput as GenerateAntdPasswordInput,
 } from "./GenerateFields";
 import { useMutation } from "@apollo/react-hooks";
 import { createEmployeeGraphQL } from "../graphql/mutations/createEmployee";
 import { publishEmployeeGraphQL } from "../graphql/mutations/publishEmployee";
 import { publishAssetGraphQL } from "../graphql/mutations/publishAsset";
-import { states, gender, earningsType, phoneType } from "../utils/staticLists"; // import { recipesGraphQL } from "../graphql/queries/recipes";
-import { UpdateEmployeeProfileForm } from "../components/UpdateEmployeeForm";
+import { states, gender, earningsType, phoneType } from "../utils/staticLists"; 
+
 import { Loading } from "./notify/Loading";
 import { useState } from "react";
 import styled from "styled-components";
-import {
-  basicRequiredInput,
-  basicRequiredDropdown,
-} from "../utils/formValidator";
-import { formatSS } from "../utils/format";
+
 import { PictureUploader } from "./PictureUploader";
-import GraphImg from "graphcms-image";
 import Router from "next/router";
-import { UpdateCompanyProfileForm } from "./UpdateCompanyProfileForm";
+import * as Yup from "yup";
+import {
+  phoneNumberMask,
+  phoneRegExp,
+  zipRegExp,
+  zipMask,
+  phoneExtMask,
+} from "../utils/inputMasks";
 
 type CreateEmployeeFormProps = {
   id: any;
@@ -54,6 +62,12 @@ const StyledForm = styled(Form)`
     `}
 `;
 
+const StyledResetButton = styled(ResetButton)`
+  ${({ theme }) => `
+        margin-left: ${theme["margin-xsmall"]};
+    `}
+`;
+
 export const CreateEmployeeForm = ({
   id,
   legalBusinessName,
@@ -78,11 +92,13 @@ export const CreateEmployeeForm = ({
 
   const [isEmployeeAdded, setIsEmployeeAdded] = useState(false);
 
-  const initiateCreateEmployee = async () => {
+  const initiateCreateEmployee = async (values) => {
     const result = await createEmployeeMutation({
       variables: {
         data: {
-          ...inputs,
+          ...values,
+          branch: { connect: { id: values.branch.value } },
+          images: inputs.images
         },
       },
     });
@@ -107,21 +123,12 @@ export const CreateEmployeeForm = ({
     Router.replace(`/company/${id}/employees/${createEmployee.id}`);
   };
 
-  const [currentBranch, setCurrentBranch] = useState({
-    id: "0",
-    branchName: "Select",
-  });
-
   const [confirmSocial, setConfirmSocial] = useState("");
 
   const {
     inputs,
-    handleDateChange,
-    handleInputChange,
-    handleCheckBoxChange,
     handleDropdownChange,
     handleSetImages,
-    handleSubmit,
     setInputs,
   } = submitForm(
     {
@@ -160,7 +167,7 @@ export const CreateEmployeeForm = ({
       currentStatus: "Pending",
       isArchived: false,
       company: { connect: { id } },
-      branch: { connect: { id: currentBranch.id } },
+      branch: { key: "0", label: "Select", value: "0" },
     },
     initiateCreateEmployee
   );
@@ -178,27 +185,10 @@ export const CreateEmployeeForm = ({
   // add select option to iterable list
   listBranches = [{ id: "0", name: "Select" }].concat(listBranches);
 
-  // add select option to actual List
-  branches = [{ id: "0", branchName: "Select" }].concat(branches);
-
-  const handleBranchDropdownChange = (event) => {
-    setInputs((inputs) => {
-      const newInputs = _.cloneDeep(inputs);
-      const newBranch = _.find(branches, function (o) {
-        return o.id === event.key;
-      });
-      _.set(newInputs, "branch", {
-        connect: { id: newBranch.id },
-      });
-
-      setCurrentBranch((state) => ({ ...state, ...newBranch }));
-      return newInputs;
-    });
-  };
-
+  
   const handleConfirmSocialChange = (event) => {
     event.persist();
-    setConfirmSocial(formatSS({ strSS: event.target.value }));
+    setConfirmSocial(event.target.value);
   };
 
   return (
@@ -209,279 +199,311 @@ export const CreateEmployeeForm = ({
             message={`${inputs.lastName}, ${inputs.firstName} has been added`}
             type="success"
           />
-          <UpdateEmployeeProfileForm
-            id={id}
-            employeeId={inputs.id}
-            legalBusinessName={legalBusinessName}
-            branches={branches}
-          />
         </>
       ) : (
         <>
           <StyledPageTitle>
             {legalBusinessName} - Create Employee
           </StyledPageTitle>
-          <StyledForm name="control-ref" onFinish={handleSubmit}>
-            <GenerateInput
-              name="firstName"
-              value={inputs.firstName}
-              handleInputChange={handleInputChange}
-              span={18}
-              rules={basicRequiredInput}
-            />
-            <GenerateInput
-              name="lastName"
-              value={inputs.lastName}
-              handleInputChange={handleInputChange}
-              span={18}
-              rules={basicRequiredInput}
-            />
-            <GenerateInput
-              name="middleInitial"
-              value={inputs.middleInitial}
-              handleInputChange={handleInputChange}
-              span={8}
-              maxLength={1}
-            />
-            <GenerateInput
-              name="maidenName"
-              value={inputs.maidenName}
-              handleInputChange={handleInputChange}
-              span={18}
-            />
-            <GenerateInput
-              name="alsoKnownAs"
-              value={inputs.alsoKnownAs}
-              handleInputChange={handleInputChange}
-              span={18}
-            />
-            <GenerateDropdown
-              name="gender"
-              value={inputs.gender}
-              handleDropdownChange={handleDropdownChange}
-              list={gender}
-              span={18}
-              rules={basicRequiredDropdown(inputs.gender)}
-            />
-            <GenerateObjectDropdown
-              name="branch"
-              objList={listBranches}
-              value={currentBranch.branchName}
-              handleDropdownChange={handleBranchDropdownChange}
-              span={18}
-              rules={basicRequiredDropdown(currentBranch.branchName)}
-            />
-            <GenerateCheckbox
-              name="sharedEmployee"
-              checked={inputs.sharedEmployee}
-              handleInputChange={handleCheckBoxChange}
-              span={18}
-            />
-            <GenerateDateInput
-              name="birthdate"
-              value={inputs.birthdate}
-              handleDateChange={handleDateChange}
-              span={12}
-              rules={basicRequiredInput}
-            />
-            <GeneratePasswordInput
-              name="social"
-              value={formatSS({ strSS: inputs.social })}
-              handleInputChange={handleInputChange}
-              span={12}
-              rules={basicRequiredInput}
-              // maxLength={9}
-            />
-            {inputs.social ? (
-              <GeneratePasswordInput
-                name="confirmSocial"
-                value={confirmSocial}
-                handleInputChange={handleConfirmSocialChange}
-                span={12}
-                maxLength={9}
-                rules={[
-                  {
-                    required: true,
-                    message: "This field is required",
-                  },
-                  ({ getFieldValue }) => ({
-                    validator(rule, value) {
-                      if (
-                        !value ||
-                        !value.target ||
-                        !getFieldValue("social").target ||
-                        getFieldValue("social").target.value ===
-                          formatSS({ strSS: value.target.value })
-                      ) {
-                        return Promise.resolve();
-                      }
-                      return Promise.reject(
-                        "The two socials do not match"
-                      );
-                    },
-                  }),
-                ]}
-              />
-            ) : null}
+          <Formik
+            initialValues={{
+              firstName: "",
+              lastName: "",
+              middleInitial: "",
+              maidenName: "",
+              alsoKnownAs: "",
+              gender: "Select",
+              birthdate: null,
+              social: "",
+              sharedEmployee: false,
+              earningsType: "Select",
+              originalHireDate: null,
+              orientationDate: null,
+              address1: "",
+              address2: "",
+              city: "",
+              state: "Select",
+              zip: "",
+              country: "",
+              phone1: "",
+              phone1Type: "Select",
+              phone1Ext: "",
+              phone2: "",
+              phone2Type: "Select",
+              phone2Ext: "",
+              phone3: "",
+              phone3Type: "Select",
+              phone3Ext: "",
+              otherPhone: "",
+              otherPhoneType: "Select",
+              otherPhoneExt: "",
+              fax: "",
+              email: "",
+              currentStatus: "Pending",
+              isArchived: false,
+              company: { connect: { id } },
+              branch: { key: "0", label: "Select", value: "0" },
+            }}
+            validationSchema={Yup.object({
+              firstName: Yup.string().required("Required"),
+              lastName: Yup.string().required("Required"),
+              gender: Yup.string().test("select", "Required", (value) => {
+                return value !== "Select" && value;
+              }),
+              branch: Yup.object().test("select", "Required", (value) => {
+                return value.value !== "0" && value;
+              }),
+              birthdate: Yup.date().required("Required").nullable(),
+              social: Yup.string()
+                .test("confirmSocial", "Socials do not match", (value) => {
+                  return value === confirmSocial;
+                })
+                .required("Required"),
+              earningsType: Yup.string().test("select", "Required", (value) => {
+                return value !== "Select" && value;
+              }),
+              originalHireDate: Yup.date().required("Required").nullable(),
+              address1: Yup.string().required("Required"),
+              city: Yup.string().required("Required"),
+              state: Yup.string().test("select", "Required", (value) => {
+                return value !== "Select" && value;
+              }),
+              zip: Yup.string()
+                .matches(zipRegExp, "Zip is not valid")
+                .required("Required"),
+              phone1: Yup.string()
+                .matches(phoneRegExp, "Number is not valid")
+                .required("Required"),
+            })}
+            onSubmit={(values, { setSubmitting }) => {
+              setTimeout(() => {
+                initiateCreateEmployee(values);
+                setSubmitting(false);
+              }, 400);
+            }}
+            enableReinitialize={true}
+          >
+            {(props) => {
+              const {
+                values,
+                touched,
+                errors,
+                handleChange,
+                handleBlur,
+                setFieldValue,
+              } = props;
+              return (
+                <StyledForm>
+                  <GenerateInput name="firstName" span={18} />
+                  <GenerateInput name="lastName" span={18} />
+                  <GenerateInput name="middleInitial" span={8} maxLength={1} />
+                  <GenerateInput name="maidenName" span={18} />
+                  <GenerateInput name="alsoKnownAs" span={18} />
+                  <GenerateDropdown
+                    name="gender"
+                    value={inputs.gender}
+                    handleDropdownChange={handleDropdownChange}
+                    list={gender}
+                    span={12}
+                  />
+                  <GenerateObjectDropdown
+                    name="branch"
+                    objList={listBranches}
+                    value={values.branch}
+                    span={18}
+                    handleDropdownChange={(e) => handleDropdownChange}
+                  />
+                  <GenerateCheckbox name="sharedEmployee" span={18} />
+                  <GenerateDateInput name="birthdate" span={12} />
+                  <GeneratePasswordInput
+                    name="social"
+                    span={12}
+                    maxLength={9}
+                  />
+                  {values.social ? (
+                    <GenerateAntdPasswordInput
+                      name="confirmSocial"
+                      value={confirmSocial}
+                      handleInputChange={handleConfirmSocialChange}
+                      span={12}
+                      maxLength={9}
+                    />
+                  ) : null}
+                  <GenerateDropdown
+                    name="earningsType"
+                    value={inputs.earningsType}
+                    handleDropdownChange={handleDropdownChange}
+                    list={earningsType}
+                    span={18}
+                  />
+                  <GenerateDateInput name="originalHireDate" span={12} />
+                  <GenerateDateInput name="orientationDate" span={12} />
+                  <GenerateInput name="address1" span={18} />
+                  <GenerateInput name="address2" span={18} />
+                  <GenerateInput name="city" span={18} />
+                  <GenerateDropdown
+                    name="state"
+                    value={inputs.state}
+                    handleDropdownChange={handleDropdownChange}
+                    list={states}
+                    span={6}
+                  />
+                  <GenerateCustomInput
+                    name="zip"
+                    span={8}
+                    handleChange={handleChange}
+                    handleBlur={handleBlur}
+                    errors={errors}
+                    touched={touched}
+                    mask={zipMask}
+                    value={values.zip}
+                    setFieldValue={setFieldValue}
+                  />
+                  <GenerateInput name="email" span={18} />
+                  <GenerateCustomInput
+                    name="phone1"
+                    span={12}
+                    handleChange={handleChange}
+                    handleBlur={handleBlur}
+                    errors={errors}
+                    touched={touched}
+                    mask={phoneNumberMask}
+                    value={values.phone1}
+                    setFieldValue={setFieldValue}
+                  />
+                  <GenerateCustomInput
+                    name="phone1Ext"
+                    span={8}
+                    handleChange={handleChange}
+                    handleBlur={handleBlur}
+                    errors={errors}
+                    touched={touched}
+                    mask={phoneExtMask}
+                    value={values.phone1Ext}
+                    setFieldValue={setFieldValue}
+                  />
+                  <GenerateDropdown
+                    name="phone1Type"
+                    value={inputs.phone1Type}
+                    handleDropdownChange={handleDropdownChange}
+                    list={phoneType}
+                    span={18}
+                  />
 
-            <GenerateDropdown
-              name="earningsType"
-              value={inputs.earningsType}
-              handleDropdownChange={handleDropdownChange}
-              list={earningsType}
-              span={18}
-              rules={basicRequiredDropdown(inputs.earningsType)}
-            />
-            <GenerateDateInput
-              name="originalHireDate"
-              value={inputs.originalHireDate}
-              handleDateChange={handleDateChange}
-              span={12}
-              rules={basicRequiredInput}
-            />
-            <GenerateDateInput
-              name="orientationDate"
-              value={inputs.orientationDate}
-              handleDateChange={handleDateChange}
-              span={12}
-            />
-            <GenerateInput
-              name="address1"
-              value={inputs.address1}
-              handleInputChange={handleInputChange}
-              span={18}
-              rules={basicRequiredInput}
-            />
-            <GenerateInput
-              name="address2"
-              value={inputs.address2}
-              handleInputChange={handleInputChange}
-              span={18}
-            />
-            <GenerateInput
-              name="city"
-              value={inputs.city}
-              handleInputChange={handleInputChange}
-              span={18}
-              rules={basicRequiredInput}
-            />
-            <GenerateDropdown
-              name="state"
-              value={inputs.state}
-              handleDropdownChange={handleDropdownChange}
-              list={states}
-              span={8}
-              rules={basicRequiredDropdown(inputs.state)}
-            />
-            <GenerateInput
-              name="zip"
-              value={inputs.zip}
-              handleInputChange={handleInputChange}
-              span={8}
-              rules={basicRequiredInput}
-            />
-            <GenerateInput
-              name="email"
-              value={inputs.email}
-              handleInputChange={handleInputChange}
-              span={18}
-            />
-            <GenerateInput
-              name="phone1"
-              value={inputs.phone1}
-              handleInputChange={handleInputChange}
-              span={12}
-              rules={basicRequiredInput}
-            />
-            <GenerateInput
-              name="phone1Ext"
-              value={inputs.phone1Ext}
-              handleInputChange={handleInputChange}
-              span={12}
-            />
-            <GenerateDropdown
-              name="phone1Type"
-              value={inputs.phone1Type ? inputs.phone1Type : "Select"}
-              handleDropdownChange={handleDropdownChange}
-              list={phoneType}
-              span={18}
-            />
-            <GenerateInput
-              name="phone2"
-              value={inputs.phone2}
-              handleInputChange={handleInputChange}
-              span={12}
-            />
-            <GenerateInput
-              name="phone2Ext"
-              value={inputs.phone2Ext}
-              handleInputChange={handleInputChange}
-              span={12}
-            />
-            <GenerateDropdown
-              name="phone2Type"
-              value={inputs.phone2Type ? inputs.phone2Type : "Select"}
-              handleDropdownChange={handleDropdownChange}
-              list={phoneType}
-              span={18}
-            />
-            <GenerateInput
-              name="phone3"
-              value={inputs.phone3}
-              handleInputChange={handleInputChange}
-              span={12}
-            />
-            <GenerateInput
-              name="phone3Ext"
-              value={inputs.phone3Ext}
-              handleInputChange={handleInputChange}
-              span={12}
-            />
-            <GenerateDropdown
-              name="phone3Type"
-              value={inputs.phone3Type ? inputs.phone3Type : "Select"}
-              handleDropdownChange={handleDropdownChange}
-              list={phoneType}
-              span={18}
-            />
-            <GenerateInput
-              name="otherPhone"
-              value={inputs.otherPhone}
-              handleInputChange={handleInputChange}
-              span={12}
-            />
-            <GenerateInput
-              name="otherPhoneExt"
-              value={inputs.otherPhoneExt}
-              handleInputChange={handleInputChange}
-              span={12}
-            />
-            <GenerateDropdown
-              name="otherPhoneType"
-              value={inputs.otherPhoneType ? inputs.otherPhoneType : "Select"}
-              handleDropdownChange={handleDropdownChange}
-              list={phoneType}
-              span={18}
-            />
-            <Col span={4} offset={1}>
-              <Form.Item label="Profile Picture">
-                <PictureUploader
-                  setPictureState={setPictureState}
-                  handleSetImages={handleSetImages}
-                />
-              </Form.Item>
-            </Col>
-            <Col span={6} offset={1}>
-              <Button
-                block
-                disabled={disabled}
-                type="primary"
-                htmlType="submit"
-              >
-                Save
-              </Button>
-            </Col>
-          </StyledForm>
+                  <GenerateCustomInput
+                    name="phone2"
+                    span={12}
+                    handleChange={handleChange}
+                    handleBlur={handleBlur}
+                    errors={errors}
+                    touched={touched}
+                    mask={phoneNumberMask}
+                    value={values.phone2}
+                    setFieldValue={setFieldValue}
+                  />
+                  <GenerateCustomInput
+                    name="phone2Ext"
+                    span={8}
+                    handleChange={handleChange}
+                    handleBlur={handleBlur}
+                    errors={errors}
+                    touched={touched}
+                    mask={phoneExtMask}
+                    value={values.phone2Ext}
+                    setFieldValue={setFieldValue}
+                  />
+                  <GenerateDropdown
+                    name="phone2Type"
+                    value={inputs.phone2Type}
+                    handleDropdownChange={handleDropdownChange}
+                    list={phoneType}
+                    span={18}
+                  />
+
+                  <GenerateCustomInput
+                    name="phone3"
+                    span={12}
+                    handleChange={handleChange}
+                    handleBlur={handleBlur}
+                    errors={errors}
+                    touched={touched}
+                    mask={phoneNumberMask}
+                    value={values.phone3}
+                    setFieldValue={setFieldValue}
+                  />
+                  <GenerateCustomInput
+                    name="phone3Ext"
+                    span={8}
+                    handleChange={handleChange}
+                    handleBlur={handleBlur}
+                    errors={errors}
+                    touched={touched}
+                    mask={phoneExtMask}
+                    value={values.phone3Ext}
+                    setFieldValue={setFieldValue}
+                  />
+                  <GenerateDropdown
+                    name="phone3Type"
+                    value={inputs.phone3Type}
+                    handleDropdownChange={handleDropdownChange}
+                    list={phoneType}
+                    span={18}
+                  />
+
+                  <GenerateCustomInput
+                    name="otherPhone"
+                    span={12}
+                    handleChange={handleChange}
+                    handleBlur={handleBlur}
+                    errors={errors}
+                    touched={touched}
+                    mask={phoneNumberMask}
+                    value={values.otherPhone}
+                    setFieldValue={setFieldValue}
+                  />
+                  <GenerateCustomInput
+                    name="otherPhoneExt"
+                    span={8}
+                    handleChange={handleChange}
+                    handleBlur={handleBlur}
+                    errors={errors}
+                    touched={touched}
+                    mask={phoneExtMask}
+                    value={values.otherPhoneExt}
+                    setFieldValue={setFieldValue}
+                  />
+                  <GenerateDropdown
+                    name="otherPhoneType"
+                    value={inputs.otherPhoneType}
+                    handleDropdownChange={handleDropdownChange}
+                    list={phoneType}
+                    span={18}
+                  />
+
+                  <Col span={4} offset={1}>
+                    <Form.Item name="images" label="Profile Picture">
+                      <PictureUploader
+                        setPictureState={setPictureState}
+                        handleSetImages={handleSetImages}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={18} offset={1}>
+                    <SubmitButton disabled={disabled} type="primary">
+                      Create
+                    </SubmitButton>
+                    <StyledResetButton
+                      disabled={disabled}
+                      type="primary"
+                      danger
+                    >
+                      Reset
+                    </StyledResetButton>
+                  </Col>
+                </StyledForm>
+              );
+            }}
+          </Formik>
         </>
       )}
     </>

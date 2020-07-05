@@ -1,17 +1,17 @@
 import getConfig from "next/config";
 import * as _ from "lodash";
 import { Upload, Button } from "antd";
-import { Dispatch, SetStateAction} from "react";
+import { Dispatch, SetStateAction } from "react";
 import { UploadOutlined } from "@ant-design/icons";
 
 const { publicRuntimeConfig } = getConfig();
 
 const {
-    APIURL,
-    APIKEY,
-    PROJECTID,
-    BRANCH,
-    CDNBASE
+  APIURL,
+  APIKEY,
+  PROJECTID,
+  BRANCH,
+  CDNBASE,
 } = publicRuntimeConfig.graphcms;
 
 export const PictureUploader = ({
@@ -35,15 +35,15 @@ export const PictureUploader = ({
       if (info.file.status === "uploading") {
         setPictureState((state) => ({ ...state, isPicUploading: true }));
       }
-      
+
       if (info.file.status === "done") {
         const { size, type, filename } = info.file.response;
-        
+
         var img = new Image();
         img.onload = function () {
           const height = _.get(this, "naturalHeight");
           const width = _.get(this, "naturalWidth");
-          
+
           handleSetImages({
             create: {
               handle: _.get(info, "file.response.url").replace(CDNBASE, ""),
@@ -54,10 +54,10 @@ export const PictureUploader = ({
               mimeType: type,
             },
           });
-          
+
           setPictureState((state) => ({ ...state, isPicUploading: false }));
         };
-        
+
         img.src = info.file.response.url;
       } else if (info.file.status === "error") {
         setPictureState((state) => ({ ...state, isPicUploading: false }));

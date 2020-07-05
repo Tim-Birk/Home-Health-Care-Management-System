@@ -23,6 +23,9 @@ export const createBranchGraphQL = gql`
       contactEmail
       company {
         id
+        companyUsers {
+          user
+        }
       }
     }
   }

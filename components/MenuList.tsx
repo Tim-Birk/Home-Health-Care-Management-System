@@ -1,88 +1,80 @@
-import { Menu, Select, Dropdown } from "antd";
+import { Menu } from "antd";
 import * as _ from "lodash";
-import Icon from "@ant-design/icons";
-import { useState } from "react";
+import { Field } from "formik";
+import { Select } from "formik-antd";
+
+const Option = Select.Option;
 
 type MenuListProps = {
   iterableList: string[];
   name: string;
-  handleDropdownChange: (event: any) => void;
-  handleMenuClick: (event: any) => void;
+  value?: string;
+  handleDropdownChange: (event: any, name: any) => void;
+  handleBlur?: (event: any) => void;
 };
 
 type ObjMenuListProps = {
   iterableList: object[];
   name: string;
-  handleDropdownChange: (event: any) => void;
-  handleMenuClick: (event: any) => void;
+  value?: any;
+  handleDropdownChange: (event: any, name: any) => void;
+  handleBlur?: (event: any) => void;
 };
 
 export const MenuList = ({
   iterableList,
   name,
   handleDropdownChange,
-  handleMenuClick
+  value,
+  handleBlur,
 }: MenuListProps) => {
-  
   return (
-    <Menu style={{ maxHeight: "250px", overflowY: "scroll" }} onClick={handleMenuClick}>
-      {iterableList.map((item: string) => (
-        <Menu.Item
-          key={`${item}`}
-          title={`${name}`}
-          onClick={handleDropdownChange}
+    <Field name={name}>
+      {({ field }) => (
+        <Select
+          {...field}
+          onChange={(e) => handleDropdownChange(e, name)}
+          onBlur={handleBlur}
+          value={value ? value : "Select"}
         >
-          {item}
-        </Menu.Item>
-      ))}
-    </Menu>
+          {iterableList.map((item: string) => (
+            <Option key={`${item}`} value={`${item}`}>
+              {item}
+            </Option>
+          ))}
+        </Select>
+      )}
+    </Field>
   );
 };
-// export const MenuList = ({
-//   iterableList,
-//   name,
-//   handleDropdownChange,
-// }: MenuListProps) => {
-
-//   const menu = (
-//     <Menu>
-//       {iterableList.map((item: string) => (
-//         <Menu.Item
-//           key={`${item}`}
-//           title={`${name}`}
-//           onClick={handleDropdownChange}
-//         >
-//           {item}
-//         </Menu.Item>
-//       ))}
-//     </Menu>
-//   );
-
-//   return (
-//     <Dropdown overlay={menu} trigger={['click']}>
-//       <a className="ant-dropdown-link" href="#">
-//         Hover me <Icon type="down" />
-//       </a>
-//     </Dropdown>
-//   );
-// };
 
 export const ObjectMenuList = ({
   iterableList,
   name,
   handleDropdownChange,
-  handleMenuClick
+  value,
+  handleBlur,
 }: ObjMenuListProps) => (
-  <Menu style={{ height: "200px", overflowY: "scroll" }} onClick={handleMenuClick}>
-    {iterableList.map((item: any) => (
-      <Menu.Item
-        key={`${item.id}`}
-        title={`${name}`}
-        onClick={handleDropdownChange}
+  <Field name={name}>
+    {({ field }) => (
+      <Select
+        {...field}
+        onChange={(e) => {
+          return handleDropdownChange(e, name);
+        }}
+        onBlur={handleBlur}
+        value={value}
+        defaultValue={{ key: "0", label: "Select", value: "0" }}
+        labelInValue
       >
-        {item.name}
-        {/* {_.get("name", _.find(iterableList, {id: item.id}),{})} */}
-      </Menu.Item>
-    ))}
-  </Menu>
+        {iterableList.map((item: any) => {
+          return (
+            <Option key={`${item.id}`} value={`${item.id}`}>
+              {item.name}
+            </Option>
+          );
+        })}
+      </Select>
+    )}
+  </Field>
 );

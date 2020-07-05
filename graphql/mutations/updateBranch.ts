@@ -21,11 +21,10 @@ export const updateBranchGraphQL = gql`
       contactPhone
       contactPhoneExt
       contactEmail
-      stage
       company {
         id
         companyUsers {
-          id
+          user
         }
       }
     }

@@ -14,6 +14,7 @@ export const createCompanyUpdateObj = (data, newObj) => {
 };
 
 export const createBranchUpdateObj = (data, newObj) => {
+  console.log(data)
   const updateObj = {};
 
   _.mapKeys(newObj, (value, key) => {

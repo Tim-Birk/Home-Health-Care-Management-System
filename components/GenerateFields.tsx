@@ -9,7 +9,7 @@ import {
   Checkbox,
 } from "antd";
 import * as _ from "lodash";
-import { MenuList, ObjectMenuList } from "./MenuList";
+import { MenuList, ObjectMenuList } from "./MenuListOld";
 import moment from "moment";
 import { getDateFormat, formatSS } from "../utils/format";
 import { useState } from "react";

@@ -238,15 +238,15 @@ export const submitForm = (initialValues, callback) => {
           event.target.name,
           formatTaxId({ str: event.target.value })
         );
-      } else if (
-        event.target.name === "social" ||
-        event.target.name === "confirmSocial"
-      ) {
-        _.set(
-          newInputs,
-          event.target.name,
-          formatSS({ strSS: event.target.value })
-        );
+      // } else if (
+      //   event.target.name === "social" ||
+      //   event.target.name === "confirmSocial"
+      // ) {
+      //   _.set(
+      //     newInputs,
+      //     event.target.name,
+      //     formatSS({ strSS: event.target.value })
+      //   );
       } else if (event.target.name === "zip") {
         _.set(
           newInputs,
@@ -282,13 +282,23 @@ export const submitForm = (initialValues, callback) => {
     });
   };
 
-  const handleDropdownChange = (event) => {
+  const handleDropdownChange = (event, name) => {
     setInputs((inputs) => {
       const newInputs = _.cloneDeep(inputs);
-      _.set(newInputs, event.item.props.title, event.key);
+      console.log(event, name)
+      _.set(newInputs, name, event);
+      console.log(newInputs);
       return newInputs;
     });
   };
+
+  // const handleDropdownChange = (event) => {
+  //   setInputs((inputs) => {
+  //     const newInputs = _.cloneDeep(inputs);
+  //     _.set(newInputs, event.item.props.title, event.key);
+  //     return newInputs;
+  //   });
+  // };
 
   // const handleAddIngredient = (event) => {
   //   event.persist();
