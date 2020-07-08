@@ -39,3 +39,16 @@ export const createEmployeeUpdateObj = (data, newObj) => {
   
   return updateObj;
 };
+
+export const createEmployeeDisciplineUpdateObj = (data, newObj) => {
+  const updateObj = {};
+
+  _.mapKeys(newObj, (value, key) => {
+    const oldValue = _.get(data, `employeeDiscipline.${key}`);
+    if (!_.isEqual(oldValue, value)) {
+      updateObj[key] = value;
+    }
+  });
+  
+  return updateObj;
+};

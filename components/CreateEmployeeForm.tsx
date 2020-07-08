@@ -6,20 +6,16 @@ import { submitForm } from "../utils/submitForm";
 import {
   GenerateInput,
   GenerateCustomInput,
-  GeneratePasswordInput,
   GenerateDropdown,
   GenerateDateInput,
   GenerateCheckbox,
   GenerateObjectDropdown,
 } from "./GenerateFormikFields";
-import {
-  GeneratePasswordInput as GenerateAntdPasswordInput,
-} from "./GenerateFields";
 import { useMutation } from "@apollo/react-hooks";
 import { createEmployeeGraphQL } from "../graphql/mutations/createEmployee";
 import { publishEmployeeGraphQL } from "../graphql/mutations/publishEmployee";
 import { publishAssetGraphQL } from "../graphql/mutations/publishAsset";
-import { states, gender, earningsType, phoneType } from "../utils/staticLists"; 
+import { states, gender, earningsType, phoneType } from "../utils/staticLists";
 
 import { Loading } from "./notify/Loading";
 import { useState } from "react";
@@ -34,6 +30,8 @@ import {
   zipRegExp,
   zipMask,
   phoneExtMask,
+  socialMask,
+  socialRegExp,
 } from "../utils/inputMasks";
 
 type CreateEmployeeFormProps = {
@@ -93,12 +91,14 @@ export const CreateEmployeeForm = ({
   const [isEmployeeAdded, setIsEmployeeAdded] = useState(false);
 
   const initiateCreateEmployee = async (values) => {
+    delete values.confirmSocial;
+
     const result = await createEmployeeMutation({
       variables: {
         data: {
           ...values,
           branch: { connect: { id: values.branch.value } },
-          images: inputs.images
+          images: inputs.images,
         },
       },
     });
@@ -122,8 +122,6 @@ export const CreateEmployeeForm = ({
     setIsEmployeeAdded(true);
     Router.replace(`/company/${id}/employees/${createEmployee.id}`);
   };
-
-  const [confirmSocial, setConfirmSocial] = useState("");
 
   const {
     inputs,
@@ -185,11 +183,13 @@ export const CreateEmployeeForm = ({
   // add select option to iterable list
   listBranches = [{ id: "0", name: "Select" }].concat(listBranches);
 
-  
-  const handleConfirmSocialChange = (event) => {
-    event.persist();
-    setConfirmSocial(event.target.value);
-  };
+  Yup.addMethod(Yup.mixed, "sameAs", function (ref, message) {
+    return this.test("sameAs", message, function (value) {
+      let other = this.resolve(ref);
+
+      return !other || !value || value === other;
+    });
+  });
 
   return (
     <>
@@ -215,6 +215,7 @@ export const CreateEmployeeForm = ({
               gender: "Select",
               birthdate: null,
               social: "",
+              confirmSocial: "",
               sharedEmployee: false,
               earningsType: "Select",
               originalHireDate: null,
@@ -255,10 +256,11 @@ export const CreateEmployeeForm = ({
               }),
               birthdate: Yup.date().required("Required").nullable(),
               social: Yup.string()
-                .test("confirmSocial", "Socials do not match", (value) => {
-                  return value === confirmSocial;
-                })
+                .matches(socialRegExp, "Social is not valid")
                 .required("Required"),
+              confirmSocial: Yup.string()
+                .matches(socialRegExp, "Social is not valid")
+                .sameAs(Yup.ref("social"), "Socials do not match"),
               earningsType: Yup.string().test("select", "Required", (value) => {
                 return value !== "Select" && value;
               }),
@@ -301,7 +303,7 @@ export const CreateEmployeeForm = ({
                   <GenerateInput name="alsoKnownAs" span={18} />
                   <GenerateDropdown
                     name="gender"
-                    value={inputs.gender}
+                    value={values.gender}
                     handleDropdownChange={handleDropdownChange}
                     list={gender}
                     span={12}
@@ -315,26 +317,36 @@ export const CreateEmployeeForm = ({
                   />
                   <GenerateCheckbox name="sharedEmployee" span={18} />
                   <GenerateDateInput name="birthdate" span={12} />
-                  <GeneratePasswordInput
+                  <GenerateCustomInput
                     name="social"
                     span={12}
-                    maxLength={9}
+                    handleChange={handleChange}
+                    handleBlur={handleBlur}
+                    errors={errors}
+                    touched={touched}
+                    mask={socialMask}
+                    value={values.social}
+                    setFieldValue={setFieldValue}
+                    type="password"
                   />
-                  {values.social ? (
-                    <GenerateAntdPasswordInput
-                      name="confirmSocial"
-                      value={confirmSocial}
-                      handleInputChange={handleConfirmSocialChange}
-                      span={12}
-                      maxLength={9}
-                    />
-                  ) : null}
+                  <GenerateCustomInput
+                    name="confirmSocial"
+                    span={12}
+                    handleChange={handleChange}
+                    handleBlur={handleBlur}
+                    errors={errors}
+                    touched={touched}
+                    mask={socialMask}
+                    value={values.confirmSocial}
+                    setFieldValue={setFieldValue}
+                    type="password"
+                  />
                   <GenerateDropdown
                     name="earningsType"
-                    value={inputs.earningsType}
+                    value={values.earningsType}
                     handleDropdownChange={handleDropdownChange}
                     list={earningsType}
-                    span={18}
+                    span={14}
                   />
                   <GenerateDateInput name="originalHireDate" span={12} />
                   <GenerateDateInput name="orientationDate" span={12} />
@@ -343,7 +355,7 @@ export const CreateEmployeeForm = ({
                   <GenerateInput name="city" span={18} />
                   <GenerateDropdown
                     name="state"
-                    value={inputs.state}
+                    value={values.state}
                     handleDropdownChange={handleDropdownChange}
                     list={states}
                     span={6}
@@ -384,10 +396,10 @@ export const CreateEmployeeForm = ({
                   />
                   <GenerateDropdown
                     name="phone1Type"
-                    value={inputs.phone1Type}
+                    value={values.phone1Type}
                     handleDropdownChange={handleDropdownChange}
                     list={phoneType}
-                    span={18}
+                    span={10}
                   />
 
                   <GenerateCustomInput
@@ -414,10 +426,10 @@ export const CreateEmployeeForm = ({
                   />
                   <GenerateDropdown
                     name="phone2Type"
-                    value={inputs.phone2Type}
+                    value={values.phone2Type}
                     handleDropdownChange={handleDropdownChange}
                     list={phoneType}
-                    span={18}
+                    span={10}
                   />
 
                   <GenerateCustomInput
@@ -444,10 +456,10 @@ export const CreateEmployeeForm = ({
                   />
                   <GenerateDropdown
                     name="phone3Type"
-                    value={inputs.phone3Type}
+                    value={values.phone3Type}
                     handleDropdownChange={handleDropdownChange}
                     list={phoneType}
-                    span={18}
+                    span={10}
                   />
 
                   <GenerateCustomInput
@@ -474,10 +486,10 @@ export const CreateEmployeeForm = ({
                   />
                   <GenerateDropdown
                     name="otherPhoneType"
-                    value={inputs.otherPhoneType}
+                    value={values.otherPhoneType}
                     handleDropdownChange={handleDropdownChange}
                     list={phoneType}
-                    span={18}
+                    span={10}
                   />
 
                   <Col span={4} offset={1}>

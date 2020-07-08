@@ -64,3 +64,13 @@ export const getDateFormat = (date) => {
   var d = moment(date);
   return date && d.isValid() ? d : null;
 };
+
+export const formatDateMMDDYYYY = (date) => {
+  if (!date) return date;
+  return moment(date).format("MM/DD/YYYY");
+};
+
+export const capitalize = (s) => {
+  if (typeof s !== 'string') return ''
+  return s.charAt(0).toUpperCase() + s.slice(1)
+}

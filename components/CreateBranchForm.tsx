@@ -219,7 +219,7 @@ export const CreateBranchForm = ({
                   <GenerateInput name="city" span={18} />
                   <GenerateDropdown
                     name="state"
-                    value={inputs.state}
+                    value={values.state}
                     handleDropdownChange={handleDropdownChange}
                     list={states}
                     span={6}

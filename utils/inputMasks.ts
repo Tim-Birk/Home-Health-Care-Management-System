@@ -39,3 +39,19 @@ export const taxIdMask = [
 ];
 
 export const taxIdRegExp = /^(0[1-6]|1[0-6]|2[0-7]|[35][0-9]|[468][0-8]|9[0-5|8-9]|7[1-7])-?\d{7}$/;
+
+export const socialMask = [
+  /[0-9]/,
+  /\d/,
+  /\d/,
+  "-",
+  /\d/,
+  /\d/,
+  "-",
+  /\d/,
+  /\d/,
+  /\d/,
+  /\d/,
+];
+
+export const socialRegExp = /^\d{3}-\d{2}-\d{4}$/

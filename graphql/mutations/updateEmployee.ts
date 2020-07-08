@@ -1,10 +1,7 @@
 import gql from "graphql-tag";
 
 export const updateEmployeeGraphQL = gql`
-  mutation(
-    $data: EmployeeUpdateInput!
-    $where: EmployeeWhereUniqueInput!
-  ) {
+  mutation($data: EmployeeUpdateInput!, $where: EmployeeWhereUniqueInput!) {
     updateEmployee(data: $data, where: $where) {
       id
       firstName
@@ -57,6 +54,22 @@ export const updateEmployeeGraphQL = gql`
         size
         handle
         url
+      }
+      employeeDiscipline {
+        id
+        disciplineGroup {
+          id
+          name
+          isAdmin
+          allowOverlap
+        }
+        discipline {
+          id
+          name
+          abbreviation
+        }
+        startDate
+        endDate
       }
     }
   }

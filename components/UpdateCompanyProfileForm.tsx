@@ -251,7 +251,7 @@ export const UpdateCompanyProfileForm = ({
               <GenerateInput name="nationalProviderIdentifier" span={12} />
               <GenerateDropdown
                 name="businessType"
-                value={inputs.businessType}
+                value={values.businessType}
                 handleDropdownChange={handleDropdownChange}
                 list={businessType}
                 span={12}
@@ -261,7 +261,7 @@ export const UpdateCompanyProfileForm = ({
               <GenerateInput name="city" span={18} />
               <GenerateDropdown
                 name="state"
-                value={inputs.state}
+                value={values.state}
                 handleDropdownChange={handleDropdownChange}
                 list={states}
                 span={6}

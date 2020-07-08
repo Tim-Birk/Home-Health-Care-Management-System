@@ -13,7 +13,7 @@ export const MainFooter = () => (
   <StyledFooter>
     <Row>
       <Col sm={{ span: 22, offset: 1 }}>
-        <p>Footer</p>
+        <p>©2020 Created by Tim Birkmire</p>
       </Col>
     </Row>
   </StyledFooter>

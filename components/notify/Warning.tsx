@@ -1,5 +1,5 @@
-import { Row, Col, Alert } from 'antd';
-import styled from 'styled-components';
+import { Row, Col, Alert } from "antd";
+import styled from "styled-components";
 
 const StyledCol = styled(Col)`
   text-align: center;
@@ -21,5 +21,27 @@ export const Warning = ({
         type="warning"
       />
     </StyledCol>
+  </Row>
+);
+
+const StyledTabCol = styled(Col)`
+  // text-align: center;
+`;
+
+export const TabWarning = ({
+  warningHeader,
+  warningText,
+}: {
+  warningHeader: string;
+  warningText: string;
+}) => (
+  <Row>
+    <StyledTabCol>
+      <Alert
+        message={warningHeader || `Warning`}
+        description={warningText || `An unknown warning has occured.`}
+        type="warning"
+      />
+    </StyledTabCol>
   </Row>
 );

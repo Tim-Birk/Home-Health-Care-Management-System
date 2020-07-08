@@ -135,7 +135,19 @@ export class MainLayout extends Component<Props> {
                   </SubMenu>
                   {/* </Link> */}
                   {/* </Menu.Item> */}
-                  <Menu.Item key="9">Employees</Menu.Item>
+                  {/* <Menu.Item key="9">Employees</Menu.Item> */}
+                  <SubMenu key="sub3" title="Employees">
+                    <Menu.Item key="17">
+                      <Link href={`/company/${companyId}/settings/company/profile`}>
+                        <StyledLink>Discipline Groups</StyledLink>
+                      </Link>
+                    </Menu.Item>
+                    <Menu.Item key="18">
+                      <Link href={`/company/${companyId}/settings/company/branches`}>
+                        <StyledLink>Disciplines</StyledLink>
+                      </Link>
+                    </Menu.Item>
+                  </SubMenu>
                   <Menu.Item key="10">Clients</Menu.Item>
                   <Menu.Item key="11">Payroll</Menu.Item>
                   <Menu.Item key="12">Billing</Menu.Item>

@@ -285,9 +285,9 @@ export const submitForm = (initialValues, callback) => {
   const handleDropdownChange = (event, name) => {
     setInputs((inputs) => {
       const newInputs = _.cloneDeep(inputs);
-      console.log(event, name)
+      // console.log(event, name)
       _.set(newInputs, name, event);
-      console.log(newInputs);
+      // console.log(newInputs);
       return newInputs;
     });
   };

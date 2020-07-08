@@ -15,16 +15,13 @@ import { Form, SubmitButton, ResetButton } from "formik-antd";
 import {
   GenerateInput,
   GenerateCustomInput,
-  GeneratePasswordInput,
   GenerateDropdown,
   GenerateDateInput,
   GenerateCheckbox,
   GenerateObjectDropdown,
 } from "./GenerateFormikFields";
-import { GeneratePasswordInput as GenerateAntdPasswordInput } from "./GenerateFields";
 import styled from "styled-components";
 import { Loading } from "./notify/Loading";
-import { formatSS } from "../utils/format";
 import Router from "next/router";
 import { PictureUploader } from "./PictureUploader";
 import GraphImg from "graphcms-image";
@@ -35,7 +32,10 @@ import {
   zipRegExp,
   zipMask,
   phoneExtMask,
+  socialMask,
+  socialRegExp,
 } from "../utils/inputMasks";
+import { validateSDL } from "graphql/validation/validate";
 
 type UpdateEmployeeProfileFormProps = {
   id: any;
@@ -86,9 +86,9 @@ export const UpdateEmployeeProfileForm = ({
 
   const initiateUpdateEmployee = async (values) => {
     const queryImagesHandle = _.get(data, "employee.images.handle");
-    const inputsImagesHandle = _.get(inputs, "images.create.handle");
     const queryImagesId = _.get(data, "employee.images.id");
-    
+    const inputsImagesHandle = _.get(inputs, "images.create.handle");
+
     if (!_.isNil(_.get(data, "employee.images"))) {
       if (
         queryImagesHandle !== inputsImagesHandle &&
@@ -104,7 +104,14 @@ export const UpdateEmployeeProfileForm = ({
       }
     }
 
+    delete values.confirmSocial;
+
     const updateObj = createEmployeeUpdateObj(data, values);
+
+    let images;
+    if (inputs.images) {
+      images = { create: inputs.images.create };
+    }
 
     if (!_.isEmpty(updateObj)) {
       const result = await updateEmployeeMutation({
@@ -115,7 +122,7 @@ export const UpdateEmployeeProfileForm = ({
           data: {
             ...updateObj,
             branch: { connect: { id: values.branch.value } },
-            images: {create: inputs.images.create}
+            images,
           },
           where: { id: employeeId },
         },
@@ -141,8 +148,6 @@ export const UpdateEmployeeProfileForm = ({
       return employee;
     }
   };
-
-  const [confirmSocial, setConfirmSocial] = useState("");
 
   const [pictureState, setPictureState] = useState({
     isPicUploading: false,
@@ -204,8 +209,6 @@ export const UpdateEmployeeProfileForm = ({
     //   format data from server to match inputs object
     const { __typename, ...loadedEmployee } = _.get(data, "employee", {});
 
-    setConfirmSocial(loadedEmployee.social);
-
     // update inputs object to have new data
     setInputs((state) => ({ ...state, ...loadedEmployee }));
 
@@ -236,12 +239,15 @@ export const UpdateEmployeeProfileForm = ({
   // add select option to iterable list
   listBranches = [{ id: "0", name: "Select" }].concat(listBranches);
 
-  const handleConfirmSocialChange = (event) => {
-    event.persist();
-    setConfirmSocial(formatSS({ strSS: event.target.value }));
-  };
-
   const { employee } = data;
+
+  Yup.addMethod(Yup.mixed, "sameAs", function (ref, message) {
+    return this.test("sameAs", message, function (value) {
+      let other = this.resolve(ref);
+
+      return !other || !value || value === other;
+    });
+  });
 
   return (
     <>
@@ -255,6 +261,7 @@ export const UpdateEmployeeProfileForm = ({
           gender: employee.gender,
           birthdate: employee.birthdate,
           social: employee.social,
+          confirmSocial: employee.social,
           sharedEmployee: employee.sharedEmployee,
           earningsType: employee.earningsType,
           originalHireDate: employee.originalHireDate,
@@ -282,8 +289,12 @@ export const UpdateEmployeeProfileForm = ({
           currentStatus: employee.currentStatus,
           isArchived: employee.isArchived,
           company: employee.company,
-          branch: { key: employee.branch.id, label: employee.branch.branchName, value: employee.branch.id },
-          images: employee.images
+          branch: {
+            key: employee.branch.id,
+            label: employee.branch.branchName,
+            value: employee.branch.id,
+          },
+          images: employee.images,
         }}
         validationSchema={Yup.object({
           firstName: Yup.string().required("Required"),
@@ -296,10 +307,11 @@ export const UpdateEmployeeProfileForm = ({
           }),
           birthdate: Yup.date().required("Required").nullable(),
           social: Yup.string()
-            .test("confirmSocial", "Socials do not match", (value) => {
-              return value === confirmSocial  && confirmSocial;
-            })
+            .matches(socialRegExp, "Social is not valid")
             .required("Required"),
+          confirmSocial: Yup.string()
+            .matches(socialRegExp, "Social is not valid")
+            .sameAs(Yup.ref("social"), "Socials do not match"),
           earningsType: Yup.string().test("select", "Required", (value) => {
             return value !== "Select" && value;
           }),
@@ -342,7 +354,7 @@ export const UpdateEmployeeProfileForm = ({
               <GenerateInput name="alsoKnownAs" span={18} />
               <GenerateDropdown
                 name="gender"
-                value={inputs.gender}
+                value={values.gender}
                 handleDropdownChange={handleDropdownChange}
                 list={gender}
                 span={12}
@@ -356,22 +368,36 @@ export const UpdateEmployeeProfileForm = ({
               />
               <GenerateCheckbox name="sharedEmployee" span={18} />
               <GenerateDateInput name="birthdate" span={12} />
-              <GeneratePasswordInput name="social" span={12} maxLength={9} />
-              {values.social ? (
-                <GenerateAntdPasswordInput
-                  name="confirmSocial"
-                  value={confirmSocial}
-                  handleInputChange={handleConfirmSocialChange}
-                  span={12}
-                  maxLength={9}
-                />
-              ) : null}
+              <GenerateCustomInput
+                name="social"
+                span={12}
+                handleChange={handleChange}
+                handleBlur={handleBlur}
+                errors={errors}
+                touched={touched}
+                mask={socialMask}
+                value={values.social}
+                setFieldValue={setFieldValue}
+                type="password"
+              />
+              <GenerateCustomInput
+                name="confirmSocial"
+                span={12}
+                handleChange={handleChange}
+                handleBlur={handleBlur}
+                errors={errors}
+                touched={touched}
+                mask={socialMask}
+                value={values.confirmSocial}
+                setFieldValue={setFieldValue}
+                type="password"
+              />
               <GenerateDropdown
                 name="earningsType"
-                value={inputs.earningsType}
+                value={values.earningsType}
                 handleDropdownChange={handleDropdownChange}
                 list={earningsType}
-                span={18}
+                span={14}
               />
               <GenerateDateInput name="originalHireDate" span={12} />
               <GenerateDateInput name="orientationDate" span={12} />
@@ -380,7 +406,7 @@ export const UpdateEmployeeProfileForm = ({
               <GenerateInput name="city" span={18} />
               <GenerateDropdown
                 name="state"
-                value={inputs.state}
+                value={values.state}
                 handleDropdownChange={handleDropdownChange}
                 list={states}
                 span={6}
@@ -421,10 +447,10 @@ export const UpdateEmployeeProfileForm = ({
               />
               <GenerateDropdown
                 name="phone1Type"
-                value={inputs.phone1Type}
+                value={values.phone1Type}
                 handleDropdownChange={handleDropdownChange}
                 list={phoneType}
-                span={18}
+                span={10}
               />
 
               <GenerateCustomInput
@@ -451,10 +477,10 @@ export const UpdateEmployeeProfileForm = ({
               />
               <GenerateDropdown
                 name="phone2Type"
-                value={inputs.phone2Type}
+                value={values.phone2Type}
                 handleDropdownChange={handleDropdownChange}
                 list={phoneType}
-                span={18}
+                span={10}
               />
 
               <GenerateCustomInput
@@ -481,10 +507,10 @@ export const UpdateEmployeeProfileForm = ({
               />
               <GenerateDropdown
                 name="phone3Type"
-                value={inputs.phone3Type}
+                value={values.phone3Type}
                 handleDropdownChange={handleDropdownChange}
                 list={phoneType}
-                span={18}
+                span={10}
               />
 
               <GenerateCustomInput
@@ -511,15 +537,15 @@ export const UpdateEmployeeProfileForm = ({
               />
               <GenerateDropdown
                 name="otherPhoneType"
-                value={inputs.otherPhoneType}
+                value={values.otherPhoneType}
                 handleDropdownChange={handleDropdownChange}
                 list={phoneType}
-                span={18}
+                span={10}
               />
 
               <Col span={4} offset={1}>
                 <Form.Item name="images" label="Profile Picture">
-                  {inputs.images ? <GraphImg image={inputs.images} /> : null}
+                  {values.images ? <GraphImg image={values.images} /> : null}
                   <PictureUploader
                     setPictureState={setPictureState}
                     handleSetImages={handleSetImages}

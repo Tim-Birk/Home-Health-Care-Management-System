@@ -13,6 +13,7 @@ type InputType = {
   name: string;
   span: number;
   value?: any;
+  type?: string;
   maxLength?: number;
   list?: string[];
   objList?: objListItem[];
@@ -52,6 +53,7 @@ const CustomInput = (props) => {
   return <InputMask {...props} />;
 };
 
+
 export const GenerateCustomInput = ({
   name,
   span,
@@ -60,6 +62,7 @@ export const GenerateCustomInput = ({
   errors,
   mask,
   value,
+  type
 }: InputType) => (
   <Row>
     <Col span={span} offset={defaultOffset}>
@@ -79,6 +82,7 @@ export const GenerateCustomInput = ({
           className="ant-input"
           value={value}
           error={errors}
+          type={type}
         />
       </Form.Item>
     </Col>

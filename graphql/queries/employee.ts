@@ -55,6 +55,22 @@ export const employeeGraphQL = gql`
         handle
         url
       }
+      employeeDiscipline {
+        id
+        disciplineGroup {
+          id
+          name
+          isAdmin
+          allowOverlap
+        }
+        discipline {
+          id
+          name
+          abbreviation
+        }
+        startDate
+        endDate
+      }
     }
   }
 `;
