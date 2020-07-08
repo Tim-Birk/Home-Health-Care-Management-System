@@ -85,7 +85,12 @@ export const EmployeeDisciplines = ({
     startDate: formatDateMMDDYYYY(ed.startDate),
     endDate: ed.endDate ? formatDateMMDDYYYY(ed.endDate) : "present",
     edit: <EditButton employeeDisciplineId={ed.id} />,
+    sortStartDate: ed.startDate,
   }));
+
+  const sortedEmployeeDisciplineLIst = _.sortBy(employeeDisciplineList, [
+    { "sortStartDate": "desc" },
+  ]);
 
   const handleNewClick = () => {
     setShowNew(true);
@@ -170,7 +175,7 @@ export const EmployeeDisciplines = ({
 
         return (
           <StyledTable
-            dataSource={employeeDisciplineList}
+            dataSource={sortedEmployeeDisciplineLIst}
             columns={columns}
             size="middle"
             scroll={{ x: 340 }}
