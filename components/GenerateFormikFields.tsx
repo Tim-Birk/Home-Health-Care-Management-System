@@ -1,7 +1,7 @@
 import { Row, Col } from "antd";
 import { Form, Input, DatePicker, Checkbox } from "formik-antd";
 import * as _ from "lodash";
-import { MenuList, ObjectMenuList } from "./MenuList";
+import { MenuList, ObjectMenuList, ObjectMenuListMany } from "./MenuList";
 import InputMask from "react-input-mask";
 
 type objListItem = {
@@ -18,6 +18,7 @@ type InputType = {
   list?: string[];
   objList?: objListItem[];
   checked?: boolean;
+  mode?: string;
   handleDropdownChange?: (event: any, name: any) => void;
 
   handleChange?: (event: any, name: string) => void;
@@ -26,11 +27,20 @@ type InputType = {
   errors?: any;
   touched?: any;
   mask?: any;
+  min?: string;
+  max?: string;
 };
 
 const defaultOffset = 1;
 
-export const GenerateInput = ({ name, span, maxLength }: InputType) => (
+export const GenerateInput = ({
+  name,
+  span,
+  maxLength,
+  type,
+  min,
+  max,
+}: InputType) => (
   <Row>
     <Col span={span} offset={defaultOffset}>
       <Form.Item
@@ -43,6 +53,9 @@ export const GenerateInput = ({ name, span, maxLength }: InputType) => (
           )}`}
           name={`${name}`}
           maxLength={maxLength}
+          type={type}
+          min={min}
+          max={max}
         />
       </Form.Item>
     </Col>
@@ -53,7 +66,6 @@ const CustomInput = (props) => {
   return <InputMask {...props} />;
 };
 
-
 export const GenerateCustomInput = ({
   name,
   span,
@@ -62,7 +74,7 @@ export const GenerateCustomInput = ({
   errors,
   mask,
   value,
-  type
+  type,
 }: InputType) => (
   <Row>
     <Col span={span} offset={defaultOffset}>
@@ -141,6 +153,7 @@ export const GenerateObjectDropdown = ({
   setFieldValue,
   handleDropdownChange,
   handleBlur,
+  mode
 }: InputType) => {
   return (
     <Row>
@@ -155,12 +168,42 @@ export const GenerateObjectDropdown = ({
             value={value}
             handleDropdownChange={handleDropdownChange}
             handleBlur={handleBlur}
+            mode={mode}
           />
         </Form.Item>
       </Col>
     </Row>
   );
 };
+
+export const GenerateObjectDropdownMultiple = ({
+  name,
+  value,
+  objList,
+  setFieldValue,
+  handleDropdownChange,
+  handleBlur,
+}: InputType) => {
+  return (
+    <Row>
+      <Col span={12} offset={defaultOffset}>
+        <Form.Item
+          label={`${_.upperFirst(name.replace(/([a-z])([A-Z])/g, "$1 $2"))}`}
+          name={name}
+        >
+          <ObjectMenuListMany
+            iterableList={objList}
+            name={name}
+            value={value}
+            handleDropdownChange={handleDropdownChange}
+            handleBlur={handleBlur}
+          />
+        </Form.Item>
+      </Col>
+    </Row>
+  );
+};
+
 
 const dateFormat = "MM/DD/YYYY";
 

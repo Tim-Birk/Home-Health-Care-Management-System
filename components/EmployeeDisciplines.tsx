@@ -13,7 +13,7 @@ import { TabWarning } from "./notify/Warning";
 import Media from "react-media";
 import { CreateEmployeeDisciplineForm } from "../components/CreateEmployeeDisciplineForm";
 import { UpdateEmployeeDisciplineForm } from "./UpdateEmployeeDisciplineForm";
-import { employeeDisciplineGraphQL } from "../graphql/queries/employeeDispline";
+
 
 type EmployeeDisciplineProps = {
   id: any;

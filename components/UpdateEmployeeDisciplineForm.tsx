@@ -68,7 +68,9 @@ export const UpdateEmployeeDisciplineForm = ({
     loading: isDisciplineGroupsLoading,
     data: disciplineGroupsData,
     error: disciplineGroupsError,
-  } = useQuery(disciplineGroupsGraphQL, {});
+  } = useQuery(disciplineGroupsGraphQL, {
+    variables: { where: { company: { id } } },
+  });
 
   const { loading: isQueryLoading, data, error } = useQuery(
     employeeDisciplineGraphQL,

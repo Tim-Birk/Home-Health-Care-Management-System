@@ -17,6 +17,7 @@ type ObjMenuListProps = {
   iterableList: object[];
   name: string;
   value?: any;
+  mode?: string;
   handleDropdownChange: (event: any, name: any) => void;
   handleBlur?: (event: any) => void;
 };
@@ -54,6 +55,7 @@ export const ObjectMenuList = ({
   handleDropdownChange,
   value,
   handleBlur,
+  mode
 }: ObjMenuListProps) => (
   <Field name={name}>
     {({ field }) => (
@@ -66,6 +68,39 @@ export const ObjectMenuList = ({
         value={value}
         defaultValue={{ key: "0", label: "Select", value: "0" }}
         labelInValue
+        mode={mode}
+      >
+        {iterableList.map((item: any) => {
+          return (
+            <Option key={`${item.id}`} value={`${item.id}`}>
+              {item.name}
+            </Option>
+          );
+        })}
+      </Select>
+    )}
+  </Field>
+);
+
+export const ObjectMenuListMany = ({
+  iterableList,
+  name,
+  handleDropdownChange,
+  value,
+  handleBlur,
+}: ObjMenuListProps) => (
+  <Field name={name}>
+    {({ field }) => (
+      <Select
+        {...field}
+        onChange={(e) => {
+          return handleDropdownChange(e, name);
+        }}
+        onBlur={handleBlur}
+        value={value}
+        labelInValue
+        mode="multiple"
+        placeholder="Select"
       >
         {iterableList.map((item: any) => {
           return (

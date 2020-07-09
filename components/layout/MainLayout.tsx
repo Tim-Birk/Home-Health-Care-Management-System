@@ -112,9 +112,6 @@ export class MainLayout extends Component<Props> {
                 </Menu.Item>
                 <SubMenu key="sub1" icon={<SettingOutlined />} title="Settings">
                   <Menu.Item key="7">Account</Menu.Item>
-                  {/* <Menu.Item key="8"> */}
-                  {/* <Link href={`/company/${companyId}/settings/company`}> */}
-                  {/* <StyledLink>Company</StyledLink> */}
                   <SubMenu key="sub2" title="Company">
                     <Menu.Item key="15">
                       <Link href={`/company/${companyId}/settings/company/profile`}>
@@ -126,25 +123,16 @@ export class MainLayout extends Component<Props> {
                         <StyledLink>Branches</StyledLink>
                       </Link>
                     </Menu.Item>
-                    {/* <Menu.Item key="9">Employees</Menu.Item>
-                        <Menu.Item key="10">Clients</Menu.Item>
-                        <Menu.Item key="11">Payroll</Menu.Item>
-                        <Menu.Item key="12">Billing</Menu.Item>
-                        <Menu.Item key="13">Service Codes</Menu.Item>
-                        <Menu.Item key="14">Payers</Menu.Item> */}
                   </SubMenu>
-                  {/* </Link> */}
-                  {/* </Menu.Item> */}
-                  {/* <Menu.Item key="9">Employees</Menu.Item> */}
                   <SubMenu key="sub3" title="Employees">
                     <Menu.Item key="17">
-                      <Link href={`/company/${companyId}/settings/company/profile`}>
-                        <StyledLink>Discipline Groups</StyledLink>
+                      <Link href={`/company/${companyId}/settings/employees/disciplines`}>
+                        <StyledLink>Disciplines</StyledLink>
                       </Link>
                     </Menu.Item>
                     <Menu.Item key="18">
-                      <Link href={`/company/${companyId}/settings/company/branches`}>
-                        <StyledLink>Disciplines</StyledLink>
+                      <Link href={`/company/${companyId}/settings/employees/credentials`}>
+                        <StyledLink>Credentials</StyledLink>
                       </Link>
                     </Menu.Item>
                   </SubMenu>

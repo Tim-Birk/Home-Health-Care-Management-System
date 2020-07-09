@@ -61,7 +61,9 @@ export const CreateEmployeeDisciplineForm = ({
     loading: isDisciplineGroupsLoading,
     data: disciplineGroupsData,
     error: disciplineGroupsError,
-  } = useQuery(disciplineGroupsGraphQL, {});
+  } = useQuery(disciplineGroupsGraphQL, {
+    variables: { where: { company: { id } } },
+  });
 
   const [createEmployeeDisciplineMutation, { loading }] = useMutation(
     createEmployeeDisciplineGraphQL
@@ -206,10 +208,7 @@ export const CreateEmployeeDisciplineForm = ({
             enableReinitialize={true}
           >
             {(props) => {
-              const {
-                values,
-                setFieldValue,
-              } = props;
+              const { values, setFieldValue } = props;
               return (
                 <StyledForm>
                   <GenerateObjectDropdown

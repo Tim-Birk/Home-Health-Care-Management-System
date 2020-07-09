@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import * as _ from "lodash";
 
 export const createCompanyUpdateObj = (data, newObj) => {
   const updateObj = {};
@@ -9,12 +9,12 @@ export const createCompanyUpdateObj = (data, newObj) => {
       updateObj[key] = value;
     }
   });
-  
+
   return updateObj;
 };
 
 export const createBranchUpdateObj = (data, newObj) => {
-  console.log(data)
+  console.log(data);
   const updateObj = {};
 
   _.mapKeys(newObj, (value, key) => {
@@ -23,7 +23,7 @@ export const createBranchUpdateObj = (data, newObj) => {
       updateObj[key] = value;
     }
   });
-  
+
   return updateObj;
 };
 
@@ -36,7 +36,7 @@ export const createEmployeeUpdateObj = (data, newObj) => {
       updateObj[key] = value;
     }
   });
-  
+
   return updateObj;
 };
 
@@ -49,6 +49,32 @@ export const createEmployeeDisciplineUpdateObj = (data, newObj) => {
       updateObj[key] = value;
     }
   });
-  
+
+  return updateObj;
+};
+
+export const createDisciplineGroupUpdateObj = (data, newObj) => {
+  const updateObj = {};
+
+  _.mapKeys(newObj, (value, key) => {
+    const oldValue = _.get(data, `disciplineGroup.${key}`);
+    if (!_.isEqual(oldValue, value)) {
+      updateObj[key] = value;
+    }
+  });
+
+  return updateObj;
+};
+
+export const createDisciplineUpdateObj = (data, newObj) => {
+  const updateObj = {};
+
+  _.mapKeys(newObj, (value, key) => {
+    const oldValue = _.get(data, `discipline.${key}`);
+    if (!_.isEqual(oldValue, value)) {
+      updateObj[key] = value;
+    }
+  });
+
   return updateObj;
 };

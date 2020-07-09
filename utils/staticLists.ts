@@ -1,6 +1,13 @@
 export const businessType = ["Select", "Proprietary", "Voluntary"];
 export const gender = ["Select", "Male", "Female", "Nonbinary"];
-export const earningsType = ["Select", "Hourly", "Salary", "1099 w/FICA", "1099 w/no FICA", "Per diem"];
+export const earningsType = [
+  "Select",
+  "Hourly",
+  "Salary",
+  "1099 w/FICA",
+  "1099 w/no FICA",
+  "Per diem",
+];
 export const phoneType = ["Select", "Mobile", "Home", "Work", "Other"];
 
 export const states = [
