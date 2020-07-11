@@ -10,6 +10,11 @@ export const earningsType = [
 ];
 export const phoneType = ["Select", "Mobile", "Home", "Work", "Other"];
 
+export const canVerifyTypes = ["All", "Credentials", "I-9"];
+
+export const licenseCertificationTypes = ["Select", "Certification", "License"];
+export const licenseCertificationRequirements = ["Select", "Required", "Optional - if another exists", "Optional"];
+
 export const states = [
   "Select",
   "AL",

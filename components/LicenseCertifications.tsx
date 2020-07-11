@@ -1,25 +1,24 @@
 import { useState } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import * as _ from "lodash";
-import { disciplineGroupsGraphQL } from "../graphql/queries/disciplinesGroups";
+import { licenseCertificationsGraphQL } from "../graphql/queries/licenseCertifications";
 import { Button, Table } from "antd";
 import { ColumnsType } from "antd/lib/table";
 import { CheckOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 import { Loading } from "./notify/Loading";
 import { Error } from "./notify/Error";
-import Link from "next/link";
-import { formatDateMMDDYYYY } from "../utils/format";
-import { TabWarning } from "./notify/Warning";
-import Media from "react-media";
-import { UpdateDisciplineGroupForm } from "./UpdateDisciplineGroupForm";
-import { CreateDisciplineGroupForm } from "./CreateDisciplineGroupForm";
-// import { CreateEmployeeDisciplineForm } from "../components/CreateEmployeeDisciplineForm";
-// import { UpdateEmployeeDisciplineForm } from "./UpdateEmployeeDisciplineForm";
 
-type DisciplineGroupsProps = {
+import { TabWarning } from "./notify/Warning";
+
+import { CreateDisciplineForm } from "./CreateDisciplineForm";
+import { UpdateDisciplineForm } from "./UpdateDisciplineForm";
+import { CreateLicenseCertificationForm } from "./CreateLicenseCertificationForm";
+import { UpdateLicenseCertificationForm } from "./UpdateLicenseCertificationForm";
+
+type LicenseCertificationsProps = {
   id: any;
-  legalBusinessName: string;
+  legalBusinessName: any;
 };
 
 const StyledPageTitle = styled.h3`
@@ -57,18 +56,18 @@ const StyledCheck = styled(CheckOutlined)`
     `}
 `;
 
-export const DisciplineGroups = ({
+export const LicenseCertifications = ({
   id,
   legalBusinessName,
-}: DisciplineGroupsProps) => {
-  const [currentDisciplineGroupId, setCurrentDisciplineGroupId] = useState(
+}: LicenseCertificationsProps) => {
+  const [currentLicenseCertificationId, setLicenseCertificationId] = useState(
     null
   );
   const [showNew, setShowNew] = useState(false);
   const [showUpdate, setShowUpdate] = useState(false);
 
   const { loading: isQueryLoading, data, error } = useQuery(
-    disciplineGroupsGraphQL,
+    licenseCertificationsGraphQL,
     {
       variables: { where: { company: { id } } },
     }
@@ -77,15 +76,15 @@ export const DisciplineGroups = ({
   if (isQueryLoading) return <Loading />;
   if (error || !data) return <StyledError errorText={`${error}`} />;
 
-  let disciplineGroupList = _.map(data.disciplineGroups, (value) =>
-    _.get(value, "disciplineGroups", value)
+  let licenseCertificationsList = _.map(data.licenseCertifications, (value) =>
+    _.get(value, "licenseCertifications", value)
   ).map((dg) => ({
     ...dg,
     key: dg.id,
     name: dg.name,
     renderName: <a onClick={(e) => handleEditClick(dg.id)}>{dg.name}</a>,
-    renderIsAdmin: dg.isAdmin ? <StyledCheck /> : null,
-    renderAllowOverlap: dg.allowOverlap ? <StyledCheck /> : null,
+    code: dg.code,
+    type: dg.type,
     renderDisciplines: (
       <ul style={{ paddingLeft: 0 }}>
         {dg.disciplines.map((d) => (
@@ -97,7 +96,9 @@ export const DisciplineGroups = ({
     ),
   }));
 
-  const sortedDisciplineGroupList = _.sortBy(disciplineGroupList, ["name"]);
+  const sortedLicenseCertificationsList = _.sortBy(licenseCertificationsList, [
+    "name",
+  ]);
 
   const handleNewClick = () => {
     setShowNew(true);
@@ -107,8 +108,8 @@ export const DisciplineGroups = ({
     setShowNew(false);
   };
 
-  const handleEditClick = (disciplineGroupId: any) => {
-    setCurrentDisciplineGroupId(disciplineGroupId);
+  const handleEditClick = (licenseCertificationId: any) => {
+    setLicenseCertificationId(licenseCertificationId);
     setShowUpdate(true);
   };
 
@@ -116,28 +117,28 @@ export const DisciplineGroups = ({
     setShowUpdate(false);
   };
 
-  interface DisciplineGroup {
+  interface LicenseCertification {
     key: "id";
     title: "name";
     dataIndex: "id";
   }
 
-  const columns: ColumnsType<DisciplineGroup> = [
+  const columns: ColumnsType<LicenseCertification> = [
     {
-      title: "Discipline Group",
+      title: "Name ",
       dataIndex: "renderName",
       key: "name",
     },
     {
-      title: "Admin",
-      dataIndex: "renderIsAdmin",
-      key: "isAdmin",
+      title: "Code",
+      dataIndex: "code",
+      key: "code",
       responsive: ["sm"],
     },
     {
-      title: "Allow Overlap",
-      dataIndex: "renderAllowOverlap",
-      key: "allowOverlap",
+      title: "Type",
+      dataIndex: "type",
+      key: "type",
       responsive: ["sm"],
     },
     {
@@ -148,32 +149,42 @@ export const DisciplineGroups = ({
     },
   ];
 
-  const DisciplineGroupsUI = () => {
+  const LicenseCertificationsUI = () => {
     if (showNew) {
       return (
-        <CreateDisciplineGroupForm
-          id={id}
-          handleCancel={handleCancelCreateNew}
-        />
+        <>
+          <StyledPageTitle>
+            {legalBusinessName} - Create License/Certification
+          </StyledPageTitle>
+          <CreateLicenseCertificationForm
+            id={id}
+            handleCancel={handleCancelCreateNew}
+          />
+        </>
       );
     } else if (showUpdate) {
       return (
-        <UpdateDisciplineGroupForm
-          id={id}
-          disciplineGroupId={currentDisciplineGroupId}
-          handleCancel={handleEditCancel}
-        />
+        <>
+          <StyledPageTitle>
+            {legalBusinessName} - Update License/Certification
+          </StyledPageTitle>
+          <UpdateLicenseCertificationForm
+            id={id}
+            licenseCertificationId={currentLicenseCertificationId}
+            handleCancel={handleEditCancel}
+          />
+        </>
       );
     } else {
-      if (sortedDisciplineGroupList.length === 0) {
+      if (sortedLicenseCertificationsList.length === 0) {
         return (
           <>
             <StyledNewButton block type="primary" onClick={handleNewClick}>
-              Add Discipline Group
+              Add License/Certification
             </StyledNewButton>
             <TabWarning
-              warningHeader="No Discipline Groups"
-              warningText="This company has not had any Discipline Groups added yet."
+              warningHeader="No License/Certifications "
+              warningText="This company has not had any License/Certifications added yet."
             />
           </>
         );
@@ -181,11 +192,12 @@ export const DisciplineGroups = ({
 
       return (
         <>
+          <StyledPageTitle>{`${legalBusinessName} - License/Certifications`}</StyledPageTitle>
           <StyledNewButton block type="primary" onClick={handleNewClick}>
-            Add Discipline Group
+            Add License/Certification
           </StyledNewButton>
           <StyledTable
-            dataSource={sortedDisciplineGroupList}
+            dataSource={sortedLicenseCertificationsList}
             columns={columns}
           />
         </>
@@ -195,7 +207,7 @@ export const DisciplineGroups = ({
 
   return (
     <>
-      <DisciplineGroupsUI />
+      <LicenseCertificationsUI />
     </>
   );
 };

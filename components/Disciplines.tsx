@@ -2,9 +2,9 @@ import { useState } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import * as _ from "lodash";
 import { disciplinesGraphQL } from "../graphql/queries/disciplines";
-import { Button, Table } from "antd";
+import { Button, Table, Input, Space } from "antd";
 import { ColumnsType } from "antd/lib/table";
-import { CheckOutlined } from "@ant-design/icons";
+import { CheckOutlined, SearchOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 import { Loading } from "./notify/Loading";
 import { Error } from "./notify/Error";
@@ -14,8 +14,7 @@ import { TabWarning } from "./notify/Warning";
 // import { UpdateDisciplineForm } from "./UpdateDisciplineForm";
 import { CreateDisciplineForm } from "./CreateDisciplineForm";
 import { UpdateDisciplineForm } from "./UpdateDisciplineForm";
-// import { CreateEmployeeDisciplineForm } from "../components/CreateEmployeeDisciplineForm";
-// import { UpdateEmployeeDisciplineForm } from "./UpdateEmployeeDisciplineForm";
+import Highlighter from "react-highlight-words";
 
 type DisciplinesProps = {
   id: any;
@@ -58,6 +57,12 @@ const StyledCheck = styled(CheckOutlined)`
 `;
 
 export const Disciplines = ({ id, legalBusinessName }: DisciplinesProps) => {
+  const [disciplineListInfo, setDisciplineListInfo] = useState({
+    isInitialized: true,
+    disciplineList: [],
+  });
+  const [search, setSearch] = useState({ searchText: "", searchedColumn: "" });
+
   const [currentDisciplineId, setCurrentDisciplineId] = useState(null);
   const [showNew, setShowNew] = useState(false);
   const [showUpdate, setShowUpdate] = useState(false);
@@ -72,6 +77,114 @@ export const Disciplines = ({ id, legalBusinessName }: DisciplinesProps) => {
   if (isQueryLoading) return <Loading />;
   if (error || !data) return <StyledError errorText={`${error}`} />;
 
+  let searchInput = null;
+
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+    }) => (
+      <div style={{ padding: 8 }}>
+        <Input
+          ref={(node) => {
+            searchInput = node;
+          }}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{ width: 188, marginBottom: 8, display: "block" }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => handleReset(clearFilters)}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Reset
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
+    ),
+    onFilter: (value, record) => {
+      let searchIndex = dataIndex;
+      if (dataIndex === "renderName") {
+        searchIndex = "name";
+      }
+      return record[searchIndex]
+        .toString()
+        .toLowerCase()
+        .includes(value.toLowerCase());
+    },
+    onFilterDropdownVisibleChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.select());
+      }
+    },
+    render: (text) => {
+      return search.searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
+          searchWords={[search.searchText]}
+          autoEscape
+          textToHighlight={text.toString()}
+        />
+      ) : (
+        text
+      );
+    },
+  });
+
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    let searchIndex = dataIndex;
+    if (dataIndex === "renderName") {
+      searchIndex = "name";
+    }
+
+    setDisciplineListInfo((state) => ({
+      ...state,
+      isInitialized: false,
+      disciplineList: [
+        ...(sortedDisciplinesList = sortedDisciplinesList.filter(
+          (dicipline) => {
+            if (
+              searchIndex === "name" &&
+              dicipline.name
+                .toUpperCase()
+                .includes(selectedKeys[0].toUpperCase())
+            ) {
+              return dicipline;
+            }
+          }
+        )),
+      ],
+    }));
+  };
+
+  const handleReset = (clearFilters) => {
+    clearFilters();
+    setDisciplineListInfo((state) => ({
+      ...state,
+      disciplineList: [...sortedDisciplinesList],
+    }));
+  };
+
   let disciplinesList = _.map(data.disciplines, (value) =>
     _.get(value, "disciplines", value)
   ).map((dg) => ({
@@ -79,10 +192,10 @@ export const Disciplines = ({ id, legalBusinessName }: DisciplinesProps) => {
     key: dg.id,
     name: dg.name,
     renderName: <a onClick={(e) => handleEditClick(dg.id)}>{dg.name}</a>,
-    abbreaviation: dg.abbreviation,
+    abbreviation: dg.abbreviation,
   }));
 
-  const sortedDisciplinesList = _.sortBy(disciplinesList, ["name"]);
+  let sortedDisciplinesList = _.sortBy(disciplinesList, ["name"]);
 
   const handleNewClick = () => {
     setShowNew(true);
@@ -101,10 +214,13 @@ export const Disciplines = ({ id, legalBusinessName }: DisciplinesProps) => {
     setShowUpdate(false);
   };
 
+
   interface Discipline {
     key: "id";
     title: "name";
     dataIndex: "id";
+    name: "name";
+    abbreviation: "abbreviation";
   }
 
   const columns: ColumnsType<Discipline> = [
@@ -112,6 +228,7 @@ export const Disciplines = ({ id, legalBusinessName }: DisciplinesProps) => {
       title: "Discipline ",
       dataIndex: "renderName",
       key: "name",
+      ...getColumnSearchProps("renderName"),
     },
     {
       title: "Abbreviation",
@@ -154,7 +271,15 @@ export const Disciplines = ({ id, legalBusinessName }: DisciplinesProps) => {
           <StyledNewButton block type="primary" onClick={handleNewClick}>
             Add Discipline
           </StyledNewButton>
-          <StyledTable dataSource={sortedDisciplinesList} columns={columns} />
+          <StyledTable
+            columns={columns}
+            dataSource={
+              disciplineListInfo.isInitialized
+                ? sortedDisciplinesList
+                : disciplineListInfo.disciplineList
+            }
+            pagination={{ position: ["topLeft", "bottomRight"] }}
+          />
         </>
       );
     }

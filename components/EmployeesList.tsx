@@ -179,10 +179,6 @@ export const EmployeeList = ({
 
   const handleReset = (clearFilters) => {
     clearFilters();
-    // setSearch((state) => ({
-    //   ...state,
-    //   searchText: "",
-    // }));
     setEmployeeListInfo((state) => ({
       ...state,
       employeeList: [...sortedEmployeesList],

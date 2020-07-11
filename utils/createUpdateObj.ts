@@ -78,3 +78,30 @@ export const createDisciplineUpdateObj = (data, newObj) => {
 
   return updateObj;
 };
+
+export const createLicenseCertificationUpdateObj = (data, newObj) => {
+  const updateObj = {};
+
+  _.mapKeys(newObj, (value, key) => {
+    const oldValue = _.get(data, `licenseCertification.${key}`);
+    if (!_.isEqual(oldValue, value)) {
+      updateObj[key] = value;
+    }
+  });
+
+  return updateObj;
+};
+
+
+export const createAuthorizedPersonnelUpdateObj = (data, newObj) => {
+  const updateObj = {};
+
+  _.mapKeys(newObj, (value, key) => {
+    const oldValue = _.get(data, `authorizedPersonnel.${key}`);
+    if (!_.isEqual(oldValue, value)) {
+      updateObj[key] = value;
+    }
+  });
+
+  return updateObj;
+};

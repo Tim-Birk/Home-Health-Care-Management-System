@@ -123,6 +123,11 @@ export class MainLayout extends Component<Props> {
                         <StyledLink>Branches</StyledLink>
                       </Link>
                     </Menu.Item>
+                    <Menu.Item key="19">
+                      <Link href={`/company/${companyId}/settings/company/personnel`}>
+                        <StyledLink>Personnel</StyledLink>
+                      </Link>
+                    </Menu.Item>
                   </SubMenu>
                   <SubMenu key="sub3" title="Employees">
                     <Menu.Item key="17">
