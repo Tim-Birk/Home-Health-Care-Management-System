@@ -105,3 +105,16 @@ export const createAuthorizedPersonnelUpdateObj = (data, newObj) => {
 
   return updateObj;
 };
+
+export const createEmployeeCredentialUpdateObj = (data, newObj) => {
+  const updateObj = {};
+
+  _.mapKeys(newObj, (value, key) => {
+    const oldValue = _.get(data, `employeeCredential.${key}`);
+    if (!_.isEqual(oldValue, value)) {
+      updateObj[key] = value;
+    }
+  });
+
+  return updateObj;
+};

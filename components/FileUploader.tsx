@@ -14,11 +14,11 @@ const {
   CDNBASE,
 } = publicRuntimeConfig.graphcms;
 
-export const PictureUploader = ({
-  handleSetImages,
+export const FileUploader = ({
+  handleSetFiles,
   setPictureState,
 }: {
-  handleSetImages: (images: any) => void;
+  handleSetFiles: (images: any) => void;
   setPictureState: Dispatch<
     SetStateAction<{
       isQueryLoading: boolean;
@@ -28,30 +28,30 @@ export const PictureUploader = ({
 }) => {
   const uploadProps = {
     name: "file",
-    accept: "image/*",
     action: (file) =>
       `${APIURL}?key=${APIKEY}&path=/${PROJECTID}-${BRANCH}/${file.name}`,
     data: (file) => ({ fileUpload: file }),
-    // headers: {
-    //   // "Access-Control-Allow-Origin": "*",
-    //   "Content-type": "image/*, application/pdf, application/json",
-    //   // "Access-Control-Allow-Methods": "GET, POST, DELETE, PUT",
-    //   // "Access-Control-Allow-Headers": "*",
-    // },
+    accept: "image/*, .pdf",
+    headers: {
+      // "Access-Control-Allow-Origin": "*",
+      // "Content-type": "image/*, application/pdf, application/json",
+      // "Access-Control-Allow-Methods": "GET, POST, DELETE, PUT",
+      // "Access-Control-Allow-Headers": "*",
+    },
     onChange: async (info) => {
       if (info.file.status === "uploading") {
         setPictureState((state) => ({ ...state, isPicUploading: true }));
       }
-
+      
       if (info.file.status === "done") {
         const { size, type, filename } = info.file.response;
-
+        
         var img = new Image();
         img.onload = function () {
           const height = _.get(this, "naturalHeight");
           const width = _.get(this, "naturalWidth");
-
-          handleSetImages({
+          
+          handleSetFiles({
             create: {
               handle: _.get(info, "file.response.url").replace(CDNBASE, ""),
               fileName: filename,
@@ -61,11 +61,11 @@ export const PictureUploader = ({
               mimeType: type,
             },
           });
+
+          setPictureState((state) => ({ ...state, isPicUploading: false }));
         };
 
         img.src = info.file.response.url;
-
-        setPictureState((state) => ({ ...state, isPicUploading: false }));
       } else if (info.file.status === "error") {
         setPictureState((state) => ({ ...state, isPicUploading: false }));
       }

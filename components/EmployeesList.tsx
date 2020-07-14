@@ -243,7 +243,7 @@ export const EmployeeList = ({
     return (
       <>
         <StyledNewButton block type="primary">
-          <Link href={`/company/${id}/settings/employee/employees/create`}>
+          <Link href={`/company/${id}/employees/create`}>
             <a>New Employee</a>
           </Link>
         </StyledNewButton>

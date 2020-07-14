@@ -61,6 +61,28 @@ export const GenerateInput = ({
     </Col>
   </Row>
 );
+export const GenerateTextArea = ({
+  name,
+  span,
+  maxLength,
+}: InputType) => (
+  <Row>
+    <Col span={span} offset={defaultOffset}>
+      <Form.Item
+        name={name}
+        label={`${_.upperFirst(name.replace(/([a-z])([A-Z])/g, "$1 $2"))}`}
+      >
+        <Input.TextArea
+          placeholder={`${_.upperFirst(
+            name.replace(/([a-z])([A-Z])/g, "$1 $2")
+          )}`}
+          name={`${name}`}
+          maxLength={maxLength}
+        />
+      </Form.Item>
+    </Col>
+  </Row>
+);
 
 const CustomInput = (props) => {
   return <InputMask {...props} />;
