@@ -4,16 +4,6 @@ import { Upload, Button } from "antd";
 import { Dispatch, SetStateAction } from "react";
 import { UploadOutlined } from "@ant-design/icons";
 
-const { publicRuntimeConfig } = getConfig();
-
-const {
-  APIURL,
-  APIKEY,
-  PROJECTID,
-  BRANCH,
-  CDNBASE,
-} = publicRuntimeConfig.graphcms;
-
 export const PictureUploader = ({
   handleSetImages,
   setPictureState,
@@ -30,7 +20,7 @@ export const PictureUploader = ({
     name: "file",
     accept: "image/*",
     action: (file) =>
-      `${APIURL}?key=${APIKEY}&path=/${PROJECTID}-${BRANCH}/${file.name}`,
+      `${process.env.APIURL}?key=${process.env.APIKEY}&path=/${process.env.PROJECTID}-${process.env.BRANCH}/${file.name}`,
     data: (file) => ({ fileUpload: file }),
     // headers: {
     //   // "Access-Control-Allow-Origin": "*",
@@ -53,7 +43,7 @@ export const PictureUploader = ({
 
           handleSetImages({
             create: {
-              handle: _.get(info, "file.response.url").replace(CDNBASE, ""),
+              handle: _.get(info, "file.response.url").replace(process.env.CDNBASE, ""),
               fileName: filename,
               height,
               width,

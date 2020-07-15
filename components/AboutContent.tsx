@@ -14,7 +14,7 @@ const StyledAboutCompany = styled(Col)`
 export const AboutContent = () => {
   return (
     <StyledAboutCompany>
-      <p>
+      {/* <p>
         Icons made by{" "}
         <a href="https://www.flaticon.com/authors/freepik" title="Freepik">
           Freepik
@@ -34,7 +34,7 @@ export const AboutContent = () => {
         <a href="https://www.flaticon.com/" title="Flaticon">
           www.flaticon.com
         </a>
-      </p>
+      </p> */}
     </StyledAboutCompany>
   );
 };
