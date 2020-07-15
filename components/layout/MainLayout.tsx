@@ -98,54 +98,76 @@ export class MainLayout extends Component<Props> {
                     <StyledLink>Employees</StyledLink>
                   </Link>
                 </Menu.Item>
-                <Menu.Item key="3" icon={<ContactsOutlined />}>
+                <Menu.Item key="3" icon={<ContactsOutlined />} disabled>
                   Clients
                 </Menu.Item>
-                <Menu.Item key="4" icon={<CalendarOutlined />}>
+                <Menu.Item key="4" icon={<CalendarOutlined />} disabled>
                   Scheduling
                 </Menu.Item>
-                <Menu.Item key="5" icon={<BankOutlined />}>
+                <Menu.Item key="5" icon={<BankOutlined />} disabled>
                   Payroll
                 </Menu.Item>
-                <Menu.Item key="6" icon={<DollarOutlined />}>
+                <Menu.Item key="6" icon={<DollarOutlined />} disabled>
                   Billing
                 </Menu.Item>
                 <SubMenu key="sub1" icon={<SettingOutlined />} title="Settings">
-                  <Menu.Item key="7">Account</Menu.Item>
+                  <Menu.Item key="7" disabled>
+                    Account
+                  </Menu.Item>
                   <SubMenu key="sub2" title="Company">
                     <Menu.Item key="15">
-                      <Link href={`/company/${companyId}/settings/company/profile`}>
+                      <Link
+                        href={`/company/${companyId}/settings/company/profile`}
+                      >
                         <StyledLink>Profile</StyledLink>
                       </Link>
                     </Menu.Item>
                     <Menu.Item key="16">
-                      <Link href={`/company/${companyId}/settings/company/branches`}>
+                      <Link
+                        href={`/company/${companyId}/settings/company/branches`}
+                      >
                         <StyledLink>Branches</StyledLink>
                       </Link>
                     </Menu.Item>
                     <Menu.Item key="19">
-                      <Link href={`/company/${companyId}/settings/company/personnel`}>
+                      <Link
+                        href={`/company/${companyId}/settings/company/personnel`}
+                      >
                         <StyledLink>Personnel</StyledLink>
                       </Link>
                     </Menu.Item>
                   </SubMenu>
                   <SubMenu key="sub3" title="Employees">
                     <Menu.Item key="17">
-                      <Link href={`/company/${companyId}/settings/employees/disciplines`}>
+                      <Link
+                        href={`/company/${companyId}/settings/employees/disciplines`}
+                      >
                         <StyledLink>Disciplines</StyledLink>
                       </Link>
                     </Menu.Item>
                     <Menu.Item key="18">
-                      <Link href={`/company/${companyId}/settings/employees/credentials`}>
+                      <Link
+                        href={`/company/${companyId}/settings/employees/credentials`}
+                      >
                         <StyledLink>Credentials</StyledLink>
                       </Link>
                     </Menu.Item>
                   </SubMenu>
-                  <Menu.Item key="10">Clients</Menu.Item>
-                  <Menu.Item key="11">Payroll</Menu.Item>
-                  <Menu.Item key="12">Billing</Menu.Item>
-                  <Menu.Item key="13">Service Codes</Menu.Item>
-                  <Menu.Item key="14">Payers</Menu.Item>
+                  <Menu.Item key="10" disabled>
+                    Clients
+                  </Menu.Item>
+                  <Menu.Item key="11" disabled>
+                    Payroll
+                  </Menu.Item>
+                  <Menu.Item key="12" disabled>
+                    Billing
+                  </Menu.Item>
+                  <Menu.Item key="13" disabled>
+                    Service Codes
+                  </Menu.Item>
+                  <Menu.Item key="14" disabled>
+                    Payers
+                  </Menu.Item>
                 </SubMenu>
               </Menu>
             </Sider>
