@@ -80,7 +80,7 @@ export const EmployeeCredentials = ({
   ).map((ec) => ({
     ...ec,
     key: ec.id,
-    credential: ec.licenseCertification.name,
+    credential: ec.licenseCertification.name ? ec.licenseCertification.name : null,
     licenseCertificationNumber: ec.licenseCertificationNumber,
     issueDate: <div style={{minWidth: "80px"}}>{ec.issueDate}</div>,
     expirationDate: <div style={{minWidth: "80px"}}>{ec.expirationDate}</div>,

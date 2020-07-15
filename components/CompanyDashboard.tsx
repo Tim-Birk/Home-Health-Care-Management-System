@@ -42,7 +42,6 @@ const StyledCard = styled(Card)`
     `}
 `;
 
-
 type CompaniesDashboardProps = {
   id: any;
   title: string;
@@ -60,7 +59,11 @@ export const CompanyDashboard = ({ title, id }: CompaniesDashboardProps) => {
         <StyledCardContainer xs={24} sm={12} lg={6}>
           <StyledCard
             title="Employees"
-            extra={<Link href={`/company/${id}/employees`}><a>More</a></Link>}
+            extra={
+              <Link href={`/company/${id}/employees`}>
+                <a>More</a>
+              </Link>
+            }
           >
             <Col>
               <Statistic title="Active Employees" value={176} />
@@ -70,7 +73,7 @@ export const CompanyDashboard = ({ title, id }: CompaniesDashboardProps) => {
         <StyledCardContainer xs={24} sm={12} lg={6}>
           <StyledCard
             title="Clients"
-            extra={<a href="#">More</a>}
+            // extra={<a href="#">More</a>}
           >
             <Col>
               <Statistic title="Admitted Clients" value={209} />
@@ -80,7 +83,7 @@ export const CompanyDashboard = ({ title, id }: CompaniesDashboardProps) => {
         <StyledCardContainer xs={24} sm={12} lg={6}>
           <StyledCard
             title="Users"
-            extra={<a href="#">More</a>}
+            // extra={<a href="#">More</a>}
           >
             <Col>
               <Statistic title="Active Users" value={12} />
@@ -90,7 +93,11 @@ export const CompanyDashboard = ({ title, id }: CompaniesDashboardProps) => {
         <StyledCardContainer xs={24} sm={12} lg={6}>
           <StyledCard
             title="Company"
-            extra={<a href="#">More</a>}
+            extra={
+              <Link href={`/company/${id}/settings/company/profile`}>
+                <a>More</a>
+              </Link>
+            }
           >
             <StyledButtonsContainer>
               <Button type="primary">

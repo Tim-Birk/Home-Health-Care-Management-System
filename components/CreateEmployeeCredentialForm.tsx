@@ -127,6 +127,7 @@ export const CreateEmployeeCredentialForm = ({
         },
       });
     }
+    console.log(createEmployeeCredential)
     await publishEmployeeCredentialMutation({
       variables: {
         where: { id: createEmployeeCredential.id },
