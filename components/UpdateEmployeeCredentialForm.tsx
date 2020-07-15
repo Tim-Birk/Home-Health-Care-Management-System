@@ -132,16 +132,14 @@ export const UpdateEmployeeCredentialForm = ({
         });
       }
     }
-    
 
     const updateObj = createEmployeeCredentialUpdateObj(data, values);
 
     let images;
     if (inputs.images) {
       images = { create: inputs.images.create };
-    
     }
-    
+
     if (!_.isEmpty(updateObj)) {
       const result = await updateEmployeeCredentialMutation({
         variables: {
@@ -158,7 +156,7 @@ export const UpdateEmployeeCredentialForm = ({
       });
       const { updateEmployeeCredential } = result.data;
 
-     if (updateEmployeeCredential.images) {
+      if (updateEmployeeCredential.images) {
         await publishAssetMutation({
           variables: {
             where: { id: updateEmployeeCredential.images.id },
@@ -173,7 +171,7 @@ export const UpdateEmployeeCredentialForm = ({
 
       setInputs({ ...updateEmployeeCredential });
 
-    //   Router.replace(`/company/${id}/employees/${employeeId}?currentTab=3`);
+      Router.replace(`/company/${id}/employees/${employeeId}?currentTab=3`);
       return updateEmployeeCredential;
     } else {
       const updateEmployeeCredential = _.get(data, "employeeCredential");
@@ -192,7 +190,6 @@ export const UpdateEmployeeCredentialForm = ({
       employee: { connect: { id: employeeId } },
       licenseCertification: { key: "0", label: "Select", value: "0" },
       verifiedBy: { key: "0", label: "Select", value: "0" },
-      
     },
     initiateUpdateEmployeeCredential
   );
@@ -217,15 +214,25 @@ export const UpdateEmployeeCredentialForm = ({
     setEmployeeCredentialState((state) => ({ ...state, isQueryLoading }));
   }
 
+  if (
+    isQueryLoading ||
+    updateEmployeeCredentialLoading ||
+    publishEmployeeCredentialLoading ||
+    isAuthorizedPersonnelsLoading ||
+    isaLicenseCertificationsLoading ||
+    publishAssetLoading
+  )
+    return <Loading />;
+
   const disabled =
     isQueryLoading ||
     updateEmployeeCredentialLoading ||
     publishEmployeeCredentialLoading ||
     isAuthorizedPersonnelsLoading ||
     isaLicenseCertificationsLoading ||
-    publishAssetLoading; 
+    publishAssetLoading ||
+    pictureState.isPicUploading;
 
-  if (disabled) return <Loading />;
   const { employeeCredential } = data;
 
   // create iterable list for dropdown options
