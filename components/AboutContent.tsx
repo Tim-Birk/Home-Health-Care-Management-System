@@ -14,7 +14,7 @@ const StyledAboutCompany = styled(Col)`
 export const AboutContent = () => {
   return (
     <StyledAboutCompany>
-      
+      <h1>About content</h1>
     </StyledAboutCompany>
   );
 };
