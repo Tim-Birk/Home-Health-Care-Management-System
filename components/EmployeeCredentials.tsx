@@ -7,14 +7,10 @@ import { ColumnsType } from "antd/lib/table";
 import styled from "styled-components";
 import { Loading } from "./notify/Loading";
 import { Error } from "./notify/Error";
-import Link from "next/link";
-import { formatDateMMDDYYYY } from "../utils/format";
 import { TabWarning } from "./notify/Warning";
 import Media from "react-media";
 import { CreateEmployeeCredentialForm } from "./CreateEmployeeCredentialForm";
 import { UpdateEmployeeCredentialForm } from "./UpdateEmployeeCredentialForm";
-// import { CreateEmployeeCredentialForm } from "../components/CreateEmployeeCredentialForm";
-// import { UpdateEmployeeCredentialForm } from "./UpdateEmployeeCredentialForm";
 
 type EmployeeCredentialProps = {
   id: any;
@@ -22,33 +18,25 @@ type EmployeeCredentialProps = {
   legalBusinessName: string;
 };
 
-const StyledPageTitle = styled.h3`
-  ${({ theme }) => `
-        color: inherit;
-        text-align: left;
-        margin-bottom: ${theme["margin-medium"]};
-    `}
-`;
-
 const StyledNewButton = styled(Button)`
   ${({ theme }) => `
-        margin-bottom: ${theme["margin-small"]};
-        width: 125px;
-    `}
+    margin-bottom: ${theme["margin-small"]};
+    width: 125px;
+  `}
 `;
 
 const StyledError = styled(Error)`
   ${({ theme }) => `
-        .ant-col {
-          margin-top: 0;
-        }
-    `}
+    .ant-col {
+      margin-top: 0;
+    }
+  `}
 `;
 
 const StyledTable = styled(Table)`
   ${({ theme }) => `
-        max-width: 1000px;
-    `}
+    max-width: 1000px;
+  `}
 `;
 
 export const EmployeeCredentials = ({
@@ -71,7 +59,11 @@ export const EmployeeCredentials = ({
   if (error || !data) return <StyledError errorText={`${error}`} />;
 
   const EditButton = (employeeCredentialId: any) => {
-    return <div style={{minWidth: "75px", textAlign: "center"}}><a onClick={(e) => handleEditClick(employeeCredentialId)}>Edit</a></div>;
+    return (
+      <div style={{ minWidth: "75px", textAlign: "center" }}>
+        <a onClick={(e) => handleEditClick(employeeCredentialId)}>Edit</a>
+      </div>
+    );
   };
 
   let employeeCredentialList = _.map(
@@ -80,18 +72,20 @@ export const EmployeeCredentials = ({
   ).map((ec) => ({
     ...ec,
     key: ec.id,
-    credential: ec.licenseCertification.name ? ec.licenseCertification.name : null,
+    credential: ec.licenseCertification.name
+      ? ec.licenseCertification.name
+      : null,
     licenseCertificationNumber: ec.licenseCertificationNumber,
-    issueDate: <div style={{minWidth: "80px"}}>{ec.issueDate}</div>,
-    expirationDate: <div style={{minWidth: "80px"}}>{ec.expirationDate}</div>,
-    // file:
-    //   ec.images.length === 0 ? null : (
-    //     <a href={ec.images[0].url} target="_blank"></a>
-    //   ),
-    renderFiles: ec.images ? <a href={ec.images.url} target="_blank">View</a> : null,
+    issueDate: <div style={{ minWidth: "80px" }}>{ec.issueDate}</div>,
+    expirationDate: <div style={{ minWidth: "80px" }}>{ec.expirationDate}</div>,
+    renderFiles: ec.images ? (
+      <a href={ec.images.url} target="_blank">
+        View
+      </a>
+    ) : null,
     edit: <EditButton employeeCredentialId={ec.id} />,
   }));
-console.log(employeeCredentialList)
+  console.log(employeeCredentialList);
   const sortedEmployeeCredentialLIst = _.sortBy(employeeCredentialList, [
     { sortStartDate: "desc" },
   ]);

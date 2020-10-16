@@ -28,34 +28,19 @@ import {
 type UpdateLicenseCertificationFormProps = {
   id: any;
   licenseCertificationId: string;
-
   handleCancel: any;
 };
 
-const StyledPageTitle = styled.h3`
-  ${({ theme }) => `
-        color: inherit;
-        text-align: left;
-        margin-bottom: ${theme["margin-medium"]};
-    `}
-`;
-
 const StyledForm = styled(Form)`
   ${({ theme }) => `
-        max-width: 900px;
-    `}
-`;
-
-const StyledResetButton = styled(ResetButton)`
-  ${({ theme }) => `
-        margin-left: ${theme["margin-xsmall"]};
-    `}
+    max-width: 900px;
+  `}
 `;
 
 const StyledButton = styled(Button)`
   ${({ theme }) => `
-        margin-left: ${theme["margin-xsmall"]};
-    `}
+    margin-left: ${theme["margin-xsmall"]};
+  `}
 `;
 
 export const UpdateLicenseCertificationForm = ({

@@ -12,26 +12,26 @@ import { Col } from "antd";
 import { Formik } from "formik";
 import { Form, SubmitButton, ResetButton } from "formik-antd";
 import {
-    GenerateInput,
-    GenerateCustomInput,
-    GenerateDropdown,
-  } from "./GenerateFormikFields";
+  GenerateInput,
+  GenerateCustomInput,
+  GenerateDropdown,
+} from "./GenerateFormikFields";
 import styled from "styled-components";
 import { Loading } from "./notify/Loading";
 import { Error } from "./notify/Error";
 import Router from "next/router";
 import * as Yup from "yup";
 import {
-    phoneNumberMask,
-    phoneRegExp,
-    zipRegExp,
-    zipMask,
-    zipExtMask,
-    zipExtRegExp,
-    phoneExtMask,
-    taxIdMask,
-    taxIdRegExp,
-  } from "../utils/inputMasks";
+  phoneNumberMask,
+  phoneRegExp,
+  zipRegExp,
+  zipMask,
+  zipExtMask,
+  zipExtRegExp,
+  phoneExtMask,
+  taxIdMask,
+  taxIdRegExp,
+} from "../utils/inputMasks";
 
 type UpdateCompanyProfileFormProps = {
   id: any;
@@ -39,22 +39,22 @@ type UpdateCompanyProfileFormProps = {
 
 const StyledPageTitle = styled.h3`
   ${({ theme }) => `
-        color: inherit;
-        text-align: left;
-        margin-bottom: ${theme["margin-medium"]};
-    `}
+    color: inherit;
+    text-align: left;
+    margin-bottom: ${theme["margin-medium"]};
+  `}
 `;
 
 const StyledForm = styled(Form)`
   ${({ theme }) => `
-        max-width: 900px;
-    `}
+    max-width: 900px;
+  `}
 `;
 
 const StyledResetButton = styled(ResetButton)`
   ${({ theme }) => `
-        margin-left: ${theme["margin-xsmall"]};
-    `}
+    margin-left: ${theme["margin-xsmall"]};
+  `}
 `;
 
 export const UpdateCompanyProfileForm = ({
@@ -103,11 +103,7 @@ export const UpdateCompanyProfileForm = ({
     }
   };
 
-  const {
-    inputs,
-    setInputs,
-    handleDropdownChange,
-  } = submitForm(
+  const { inputs, setInputs, handleDropdownChange } = submitForm(
     {
       legalBusinessName: "",
       companyId: "",
@@ -129,7 +125,7 @@ export const UpdateCompanyProfileForm = ({
       contactTitle: "",
       contactPhone: "",
       contactExt: "",
-      contactEmail: ""
+      contactEmail: "",
     },
     initiateUpdateCompany
   );

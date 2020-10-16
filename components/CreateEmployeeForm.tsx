@@ -42,28 +42,28 @@ type CreateEmployeeFormProps = {
 
 const StyledPageTitle = styled.h3`
   ${({ theme }) => `
-        color: inherit;
-        text-align: left;
-        margin-bottom: ${theme["margin-medium"]};
-    `}
+    color: inherit;
+    text-align: left;
+    margin-bottom: ${theme["margin-medium"]};
+  `}
 `;
 
 const StyledAlert = styled(Alert)`
   ${({ theme }) => `
-        margin-bottom: ${theme["margin-small"]};
-    `}
+    margin-bottom: ${theme["margin-small"]};
+  `}
 `;
 
 const StyledForm = styled(Form)`
   ${({ theme }) => `
-        max-width: 900px;
-    `}
+    max-width: 900px;
+  `}
 `;
 
 const StyledResetButton = styled(ResetButton)`
   ${({ theme }) => `
-        margin-left: ${theme["margin-xsmall"]};
-    `}
+    margin-left: ${theme["margin-xsmall"]};
+  `}
 `;
 
 export const CreateEmployeeForm = ({

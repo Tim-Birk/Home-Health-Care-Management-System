@@ -7,17 +7,17 @@ const { Header } = Layout;
 
 const StyledHeader = styled(Header)`
   ${({ theme }) => `
-        padding-left: ${theme["padding-zero"]};
-        background-color: ${theme["header-color"]};
-        border-bottom-color: ${theme["header-border-color"]};
-        border-bottom-width: 1px;
-        border-bottom-style: solid;
-        text-align: right;
-        display: flex;
-        li {
-            font-size: ${theme["font-size-md"]};
-        }
-    `}
+      padding-left: ${theme["padding-zero"]};
+      background-color: ${theme["header-color"]};
+      border-bottom-color: ${theme["header-border-color"]};
+      border-bottom-width: 1px;
+      border-bottom-style: solid;
+      text-align: right;
+      display: flex;
+      li {
+          font-size: ${theme["font-size-md"]};
+      }
+  `}
 `;
 
 const StyledMenu = styled(Menu)`
@@ -30,37 +30,37 @@ const StyledMenu = styled(Menu)`
 
 const TitleContainer = styled.div`
   ${({ theme }) => `
-            background-color: ${theme["header-color"]};
-            width: 60%;
-            display: flex;
-            align-items: center;
-            @media (max-width: 890px){
-                visibility: hidden;
-                width: 0;
-            }
-        `}
+      background-color: ${theme["header-color"]};
+      width: 60%;
+      display: flex;
+      align-items: center;
+      @media (max-width: 890px){
+          visibility: hidden;
+          width: 0;
+      }
+  `}
 `;
 
 const Title = styled.div`
   ${({ theme }) => `
-        text-align: left;
-        display: flex;
-        line-height: 50px;
-        div{
-            width: 100%;
-            padding-left: ${theme["padding-small"]};
-        }
-        h2 {
-            display: inline;
-            color: inherit;
-        }
-        img{
-            width: 64px;
-        }
-        p {
-            line-height: 0;
-        }
-        `}
+    text-align: left;
+    display: flex;
+    line-height: 50px;
+    div{
+        width: 100%;
+        padding-left: ${theme["padding-small"]};
+    }
+    h2 {
+        display: inline;
+        color: inherit;
+    }
+    img{
+        width: 64px;
+    }
+    p {
+        line-height: 0;
+    }
+  `}
 `;
 
 export const MainNavbar = () => {

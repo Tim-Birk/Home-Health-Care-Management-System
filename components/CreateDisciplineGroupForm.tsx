@@ -1,6 +1,6 @@
 import { Col, Alert, Button } from "antd";
 import { Formik } from "formik";
-import { Form, SubmitButton, ResetButton } from "formik-antd";
+import { Form, SubmitButton } from "formik-antd";
 import * as _ from "lodash";
 import { submitForm } from "../utils/submitForm";
 import { useMutation, useQuery } from "@apollo/react-hooks";
@@ -14,7 +14,6 @@ import {
   GenerateInput,
   GenerateCheckbox,
   GenerateObjectDropdownMultiple,
-  GenerateObjectDropdown,
 } from "./GenerateFormikFields";
 import * as Yup from "yup";
 import Router from "next/router";
@@ -25,36 +24,22 @@ type CreateDisciplineGroupFormProps = {
   handleCancel: any;
 };
 
-const StyledPageTitle = styled.h3`
-  ${({ theme }) => `
-        color: inherit;
-        text-align: left;
-        margin-bottom: ${theme["margin-medium"]};
-    `}
-`;
-
 const StyledAlert = styled(Alert)`
   ${({ theme }) => `
-        margin-bottom: ${theme["margin-small"]};
-    `}
+    margin-bottom: ${theme["margin-small"]};
+  `}
 `;
 
 const StyledForm = styled(Form)`
   ${({ theme }) => `
-        max-width: 900px;
-    `}
-`;
-
-const StyledResetButton = styled(ResetButton)`
-  ${({ theme }) => `
-        margin-left: ${theme["margin-xsmall"]};
-    `}
+    max-width: 900px;
+  `}
 `;
 
 const StyledButton = styled(Button)`
   ${({ theme }) => `
-        margin-left: ${theme["margin-xsmall"]};
-    `}
+    margin-left: ${theme["margin-xsmall"]};
+  `}
 `;
 
 export const CreateDisciplineGroupForm = ({
@@ -133,7 +118,10 @@ export const CreateDisciplineGroupForm = ({
   });
 
   const disabled =
-    loading || publishDisciplineGroupLoading || isDisciplineGroupAdded || isDisciplinesLoading;
+    loading ||
+    publishDisciplineGroupLoading ||
+    isDisciplineGroupAdded ||
+    isDisciplinesLoading;
 
   return (
     <>

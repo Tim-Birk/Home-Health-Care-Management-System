@@ -10,10 +10,8 @@ import {
 } from "antd";
 import * as _ from "lodash";
 import { MenuList, ObjectMenuList } from "./MenuListOld";
-import moment from "moment";
-import { getDateFormat, formatSS } from "../utils/format";
+import { getDateFormat } from "../utils/format";
 import { useState } from "react";
-import { states } from "../utils/staticLists";
 
 type objListItem = {
   id: string;

@@ -21,39 +21,39 @@ type EmployeeListProps = {
 
 const StyledPageTitle = styled.h3`
   ${({ theme }) => `
-        color: inherit;
-        text-align: left;
-        margin-bottom: ${theme["margin-medium"]};
-    `}
+    color: inherit;
+    text-align: left;
+    margin-bottom: ${theme["margin-medium"]};
+  `}
 `;
 
 const StyledNewButton = styled(Button)`
   ${({ theme }) => `
-        margin-bottom: ${theme["margin-small"]};
-        width: 125px;
-    `}
+    margin-bottom: ${theme["margin-small"]};
+    width: 125px;
+  `}
 `;
 
 const StyledAvatar = styled(Avatar)`
   ${({ theme }) => `
-        display: none;
-        margin-right: ${theme["margin-small"]};
-        @media ${theme.device.mobileL} { 
-          display: inline-block;
-        }
-    `}
+    display: none;
+    margin-right: ${theme["margin-small"]};
+    @media ${theme.device.mobileL} { 
+      display: inline-block;
+    }
+  `}
 `;
 
 const StyledTable = styled(Table)`
   ${({ theme }) => `
-        max-width: 1800px
-    `}
+    max-width: 1800px
+  `}
 `;
 
 const StyledCheck = styled(CheckOutlined)`
   ${({ theme }) => `
-        text-align: center;
-    `}
+    text-align: center;
+  `}
 `;
 
 export const EmployeeList = ({
@@ -168,7 +168,8 @@ export const EmployeeList = ({
       employeeList: [
         ...(sortedEmployeesList = sortedEmployeesList.filter((employee) => {
           if (
-            searchIndex === "name" && employee.name.toUpperCase().includes(selectedKeys[0].toUpperCase())
+            searchIndex === "name" &&
+            employee.name.toUpperCase().includes(selectedKeys[0].toUpperCase())
           ) {
             return employee;
           }
@@ -328,7 +329,11 @@ export const EmployeeList = ({
       </Col>
       <StyledTable
         columns={columns}
-        dataSource={employeeListInfo.isInitialized ? sortedEmployeesList : employeeListInfo.employeeList}
+        dataSource={
+          employeeListInfo.isInitialized
+            ? sortedEmployeesList
+            : employeeListInfo.employeeList
+        }
         pagination={{ position: ["topLeft", "bottomRight"] }}
         onChange={handleChange}
       />

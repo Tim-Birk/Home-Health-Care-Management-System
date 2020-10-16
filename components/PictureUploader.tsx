@@ -1,4 +1,3 @@
-import getConfig from "next/config";
 import * as _ from "lodash";
 import { Upload, Button } from "antd";
 import { Dispatch, SetStateAction } from "react";
@@ -43,7 +42,10 @@ export const PictureUploader = ({
 
           handleSetImages({
             create: {
-              handle: _.get(info, "file.response.url").replace(process.env.CDNBASE, ""),
+              handle: _.get(info, "file.response.url").replace(
+                process.env.CDNBASE,
+                ""
+              ),
               fileName: filename,
               height,
               width,

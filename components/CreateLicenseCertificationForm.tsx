@@ -18,44 +18,32 @@ import {
 } from "./GenerateFormikFields";
 import * as Yup from "yup";
 import Router from "next/router";
-import { licenseCertificationTypes, licenseCertificationRequirements } from "../utils/staticLists";
+import {
+  licenseCertificationTypes,
+  licenseCertificationRequirements,
+} from "../utils/staticLists";
 
 type CreateLicenseCertificationFormProps = {
   id: any;
-
   handleCancel: any;
 };
 
-const StyledPageTitle = styled.h3`
-  ${({ theme }) => `
-        color: inherit;
-        text-align: left;
-        margin-bottom: ${theme["margin-medium"]};
-    `}
-`;
-
 const StyledAlert = styled(Alert)`
   ${({ theme }) => `
-        margin-bottom: ${theme["margin-small"]};
-    `}
+    margin-bottom: ${theme["margin-small"]};
+  `}
 `;
 
 const StyledForm = styled(Form)`
   ${({ theme }) => `
-        max-width: 900px;
-    `}
-`;
-
-const StyledResetButton = styled(ResetButton)`
-  ${({ theme }) => `
-        margin-left: ${theme["margin-xsmall"]};
-    `}
+    max-width: 900px;
+  `}
 `;
 
 const StyledButton = styled(Button)`
   ${({ theme }) => `
-        margin-left: ${theme["margin-xsmall"]};
-    `}
+    margin-left: ${theme["margin-xsmall"]};
+  `}
 `;
 
 export const CreateLicenseCertificationForm = ({
@@ -79,7 +67,10 @@ export const CreateLicenseCertificationForm = ({
     { loading: publishLicenseCertificationLoading },
   ] = useMutation(publishLicenseCertificationGraphQL);
 
-  const [isLicenseCertificationAdded, setIsLicenseCertificationAdded] = useState(false);
+  const [
+    isLicenseCertificationAdded,
+    setIsLicenseCertificationAdded,
+  ] = useState(false);
 
   const initiateCreateLicenseCertification = async (values) => {
     const connectDisplines = values.disciplines.map((d) => {
@@ -104,9 +95,7 @@ export const CreateLicenseCertificationForm = ({
     });
     setIsLicenseCertificationAdded(true);
 
-    Router.replace(
-      `/company/${id}/settings/employees/credentials`
-    );
+    Router.replace(`/company/${id}/settings/employees/credentials`);
   };
 
   const {
@@ -138,7 +127,10 @@ export const CreateLicenseCertificationForm = ({
   });
 
   const disabled =
-    loading || publishLicenseCertificationLoading || isLicenseCertificationAdded || isDisciplinesLoading;
+    loading ||
+    publishLicenseCertificationLoading ||
+    isLicenseCertificationAdded ||
+    isDisciplinesLoading;
 
   return (
     <>
@@ -153,13 +145,13 @@ export const CreateLicenseCertificationForm = ({
         <>
           <Formik
             initialValues={{
-                company: { connect: { id } },
-                name: "",
-                code: "",
-                type: "Select",
-                requirement: "Select",
-                validateDoh: false,
-                disciplines: [],
+              company: { connect: { id } },
+              name: "",
+              code: "",
+              type: "Select",
+              requirement: "Select",
+              validateDoh: false,
+              disciplines: [],
             }}
             validationSchema={Yup.object({
               name: Yup.string().required("Required"),
@@ -219,7 +211,7 @@ export const CreateLicenseCertificationForm = ({
                     span={18}
                     handleDropdownChange={(e) => handleDropdownChange}
                   />
-                  
+
                   <Col span={24} offset={1}>
                     <SubmitButton disabled={disabled} type="primary">
                       Add

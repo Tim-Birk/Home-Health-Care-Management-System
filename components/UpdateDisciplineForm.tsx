@@ -10,7 +10,7 @@ import { Col, Button } from "antd";
 import { Formik } from "formik";
 import { Form, SubmitButton, ResetButton } from "formik-antd";
 import styled from "styled-components";
-import { GenerateInput, GenerateCheckbox } from "./GenerateFormikFields";
+import { GenerateInput } from "./GenerateFormikFields";
 import * as Yup from "yup";
 import { Loading } from "./notify/Loading";
 import Router from "next/router";
@@ -22,30 +22,16 @@ type UpdateDisciplineFormProps = {
   handleCancel: any;
 };
 
-const StyledPageTitle = styled.h3`
-  ${({ theme }) => `
-        color: inherit;
-        text-align: left;
-        margin-bottom: ${theme["margin-medium"]};
-    `}
-`;
-
 const StyledForm = styled(Form)`
   ${({ theme }) => `
-        max-width: 900px;
-    `}
-`;
-
-const StyledResetButton = styled(ResetButton)`
-  ${({ theme }) => `
-        margin-left: ${theme["margin-xsmall"]};
-    `}
+    max-width: 900px;
+  `}
 `;
 
 const StyledButton = styled(Button)`
   ${({ theme }) => `
-        margin-left: ${theme["margin-xsmall"]};
-    `}
+    margin-left: ${theme["margin-xsmall"]};
+  `}
 `;
 
 export const UpdateDisciplineForm = ({

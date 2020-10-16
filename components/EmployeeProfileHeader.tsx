@@ -1,4 +1,4 @@
-import { Avatar, Divider, Badge } from "antd";
+import { Avatar, Badge } from "antd";
 import { useQuery } from "@apollo/react-hooks";
 import { employeeGraphQL } from "../graphql/queries/employee";
 import { Loading } from "./notify/Loading";
@@ -7,14 +7,14 @@ import styled from "styled-components";
 
 const StyledHeaderContainer = styled.div`
   ${({ theme }) => `
-        background-color: #fff;
-        margin-bottom: ${theme["margin-xsmall"]};
-        @media ${theme.device.tablet} { 
-            display: grid;
-            grid-template-columns: 200px auto;
-            grid-template-rows: auto auto;
-        }
-    `}
+    background-color: #fff;
+    margin-bottom: ${theme["margin-xsmall"]};
+    @media ${theme.device.tablet} { 
+      display: grid;
+      grid-template-columns: 200px auto;
+      grid-template-rows: auto auto;
+    }
+  `}
 `;
 
 const StyledNameTitle = styled.h2`
@@ -57,75 +57,74 @@ const StyledAvatar = styled(Avatar)`
 
 const StyledDescriptionsContainer = styled.div`
   ${({ theme }) => `
-        max-width: 400px;
-        margin-top: ${theme["margin-small"]};
-        padding-bottom: ${theme["padding-xsmall"]};
-        display: grid;
-        margin: auto;
-        grid-template-columns: auto auto;
-        grid-template-rows: auto auto;
-        
-        .hideSmallDevice {
-          display: none;
-        }
+    max-width: 400px;
+    margin-top: ${theme["margin-small"]};
+    padding-bottom: ${theme["padding-xsmall"]};
+    display: grid;
+    margin: auto;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto;
+    
+    .hideSmallDevice {
+      display: none;
+    }
 
-        .branchName {
-          grid-column-start: 1;
-          grid-column-end: 3;
-          grid-row-start: 1;
-          grid-row-end: 1;
-        }
+    .branchName {
+      grid-column-start: 1;
+      grid-column-end: 3;
+      grid-row-start: 1;
+      grid-row-end: 1;
+    }
 
-        @media ${theme.device.tablet} { 
-          max-width: 850px;
-          width: 100%;
-          margin-top: ${theme["margin-medium"]};
-          margin-left: ${theme["margin-small"]};
-          padding-bottom: ${theme["padding-zero"]};
-          display: grid;
-          grid-template-columns: auto auto auto;
-          grid-template-rows: auto auto;
-            .branchName {
-              grid-column-start: 1;
-              grid-column-end: 2;
-            }
+    @media ${theme.device.tablet} { 
+      max-width: 850px;
+      width: 100%;
+      margin-top: ${theme["margin-medium"]};
+      margin-left: ${theme["margin-small"]};
+      padding-bottom: ${theme["padding-zero"]};
+      display: grid;
+      grid-template-columns: auto auto auto;
+      grid-template-rows: auto auto;
+    
+      .branchName {
+        grid-column-start: 1;
+        grid-column-end: 2;
+      }
 
-            .hideSmallDevice {
-              display: flex;
-            }
-          
-        }
-    `}
+      .hideSmallDevice {
+        display: flex;
+      }  
+    }
+  `}
 `;
 
 const StyledDescriptionsItem = styled.div`
   ${({ theme }) => `
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-bottom: ${theme["margin-xsmall"]};
-        @media ${theme.device.tablet} { 
-          min-width: 85px;
-          align-items: flex-start;
-          margin-right: ${theme["margin-xlarge"]};
-        }
-    `}
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: ${theme["margin-xsmall"]};
+      @media ${theme.device.tablet} { 
+        min-width: 85px;
+        align-items: flex-start;
+        margin-right: ${theme["margin-xlarge"]};
+      }
+  `}
 `;
 
 const StyledLabel = styled.span`
   ${({ theme }) => `
-        font-weight: bold;
-        @media ${theme.device.tablet} { 
-          // padding: ${theme["padding-xsmall"]};
-        }
-    `}
+      font-weight: bold;
+      @media ${theme.device.tablet} { 
+
+      }
+  `}
 `;
 
 const StyledDescription = styled.span`
   ${({ theme }) => `
       @media ${theme.device.tablet} { 
-        // min-width: 110px;
-        // padding: ${theme["padding-xsmall"]};
+
       }
   `}
 `;

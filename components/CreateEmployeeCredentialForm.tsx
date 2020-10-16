@@ -20,7 +20,6 @@ import {
 } from "./GenerateFormikFields";
 import * as Yup from "yup";
 import Router from "next/router";
-import { FileUploader } from "./FileUploader";
 import { PictureUploader } from "./PictureUploader";
 
 type CreateEmployeeCredentialFormProps = {
@@ -30,36 +29,22 @@ type CreateEmployeeCredentialFormProps = {
   handleCancel: any;
 };
 
-const StyledPageTitle = styled.h3`
-  ${({ theme }) => `
-        color: inherit;
-        text-align: left;
-        margin-bottom: ${theme["margin-medium"]};
-    `}
-`;
-
 const StyledAlert = styled(Alert)`
   ${({ theme }) => `
-        margin-bottom: ${theme["margin-small"]};
-    `}
+    margin-bottom: ${theme["margin-small"]};
+  `}
 `;
 
 const StyledForm = styled(Form)`
   ${({ theme }) => `
-        max-width: 900px;
-    `}
-`;
-
-const StyledResetButton = styled(ResetButton)`
-  ${({ theme }) => `
-        margin-left: ${theme["margin-xsmall"]};
-    `}
+    max-width: 900px;
+  `}
 `;
 
 const StyledButton = styled(Button)`
   ${({ theme }) => `
-        margin-left: ${theme["margin-xsmall"]};
-    `}
+    margin-left: ${theme["margin-xsmall"]};
+  `}
 `;
 
 export const CreateEmployeeCredentialForm = ({
@@ -127,7 +112,7 @@ export const CreateEmployeeCredentialForm = ({
         },
       });
     }
-    console.log(createEmployeeCredential)
+    console.log(createEmployeeCredential);
     await publishEmployeeCredentialMutation({
       variables: {
         where: { id: createEmployeeCredential.id },

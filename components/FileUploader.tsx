@@ -42,15 +42,15 @@ export const FileUploader = ({
       if (info.file.status === "uploading") {
         setPictureState((state) => ({ ...state, isPicUploading: true }));
       }
-      
+
       if (info.file.status === "done") {
         const { size, type, filename } = info.file.response;
-        
+
         var img = new Image();
         img.onload = function () {
           const height = _.get(this, "naturalHeight");
           const width = _.get(this, "naturalWidth");
-          
+
           handleSetFiles({
             create: {
               handle: _.get(info, "file.response.url").replace(CDNBASE, ""),

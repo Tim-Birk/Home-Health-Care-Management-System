@@ -47,10 +47,6 @@ type CompaniesDashboardProps = {
   title: string;
 };
 
-function callback(key) {
-  console.log(key);
-}
-
 export const CompanyDashboard = ({ title, id }: CompaniesDashboardProps) => {
   return (
     <>
@@ -71,20 +67,14 @@ export const CompanyDashboard = ({ title, id }: CompaniesDashboardProps) => {
           </StyledCard>
         </StyledCardContainer>
         <StyledCardContainer xs={24} sm={12} lg={6}>
-          <StyledCard
-            title="Clients"
-            // extra={<a href="#">More</a>}
-          >
+          <StyledCard title="Clients">
             <Col>
               <Statistic title="Admitted Clients" value={209} />
             </Col>
           </StyledCard>
         </StyledCardContainer>
         <StyledCardContainer xs={24} sm={12} lg={6}>
-          <StyledCard
-            title="Users"
-            // extra={<a href="#">More</a>}
-          >
+          <StyledCard title="Users">
             <Col>
               <Statistic title="Active Users" value={12} />
             </Col>

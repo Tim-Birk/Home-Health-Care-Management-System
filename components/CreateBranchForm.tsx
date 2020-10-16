@@ -3,7 +3,6 @@ import { Formik } from "formik";
 import { Form, SubmitButton, ResetButton } from "formik-antd";
 import * as _ from "lodash";
 import { submitForm } from "../utils/submitForm";
-import { useFetchUser } from "../utils/user";
 import { useMutation } from "@apollo/react-hooks";
 import { createBranchGraphQL } from "../graphql/mutations/createBranch";
 import { publishBranchGraphQL } from "../graphql/mutations/publishBranch";
@@ -35,28 +34,28 @@ type CreateBranchProfileFormProps = {
 
 const StyledPageTitle = styled.h3`
   ${({ theme }) => `
-        color: inherit;
-        text-align: left;
-        margin-bottom: ${theme["margin-medium"]};
-    `}
+    color: inherit;
+    text-align: left;
+    margin-bottom: ${theme["margin-medium"]};
+  `}
 `;
 
 const StyledAlert = styled(Alert)`
   ${({ theme }) => `
-        margin-bottom: ${theme["margin-small"]};
-    `}
+    margin-bottom: ${theme["margin-small"]};
+  `}
 `;
 
 const StyledForm = styled(Form)`
   ${({ theme }) => `
-        max-width: 900px;
-    `}
+    max-width: 900px;
+  `}
 `;
 
 const StyledResetButton = styled(ResetButton)`
   ${({ theme }) => `
-        margin-left: ${theme["margin-xsmall"]};
-    `}
+    margin-left: ${theme["margin-xsmall"]};
+  `}
 `;
 
 export const CreateBranchForm = ({
@@ -174,8 +173,10 @@ export const CreateBranchForm = ({
               zip: Yup.string()
                 .matches(zipRegExp, "Zip is not valid")
                 .required("Required"),
-              zipExt: Yup.string()
-                .matches(zipExtRegExp, "Zip Extension is not valid"),
+              zipExt: Yup.string().matches(
+                zipExtRegExp,
+                "Zip Extension is not valid"
+              ),
               phone: Yup.string()
                 .matches(phoneRegExp, "Number is not valid")
                 .required("Required"),

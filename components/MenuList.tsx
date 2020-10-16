@@ -1,4 +1,3 @@
-import { Menu } from "antd";
 import * as _ from "lodash";
 import { Field } from "formik";
 import { Select } from "formik-antd";
@@ -55,7 +54,7 @@ export const ObjectMenuList = ({
   handleDropdownChange,
   value,
   handleBlur,
-  mode
+  mode,
 }: ObjMenuListProps) => (
   <Field name={name}>
     {({ field }) => (

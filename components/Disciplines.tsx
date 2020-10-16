@@ -8,10 +8,7 @@ import { CheckOutlined, SearchOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 import { Loading } from "./notify/Loading";
 import { Error } from "./notify/Error";
-
 import { TabWarning } from "./notify/Warning";
-
-// import { UpdateDisciplineForm } from "./UpdateDisciplineForm";
 import { CreateDisciplineForm } from "./CreateDisciplineForm";
 import { UpdateDisciplineForm } from "./UpdateDisciplineForm";
 import Highlighter from "react-highlight-words";
@@ -21,39 +18,25 @@ type DisciplinesProps = {
   legalBusinessName: string;
 };
 
-const StyledPageTitle = styled.h3`
-  ${({ theme }) => `
-        color: inherit;
-        text-align: left;
-        margin-bottom: ${theme["margin-medium"]};
-    `}
-`;
-
 const StyledNewButton = styled(Button)`
   ${({ theme }) => `
-        margin-bottom: ${theme["margin-small"]};
-        width: auto;
-    `}
+    margin-bottom: ${theme["margin-small"]};
+    width: auto;
+  `}
 `;
 
 const StyledError = styled(Error)`
   ${({ theme }) => `
-        .ant-col {
-          margin-top: 0;
-        }
-    `}
+    .ant-col {
+      margin-top: 0;
+    }
+  `}
 `;
 
 const StyledTable = styled(Table)`
   ${({ theme }) => `
-        max-width: 1000px;
-    `}
-`;
-
-const StyledCheck = styled(CheckOutlined)`
-  ${({ theme }) => `
-
-    `}
+    max-width: 1000px;
+  `}
 `;
 
 export const Disciplines = ({ id, legalBusinessName }: DisciplinesProps) => {
@@ -213,7 +196,6 @@ export const Disciplines = ({ id, legalBusinessName }: DisciplinesProps) => {
   const handleEditCancel = () => {
     setShowUpdate(false);
   };
-
 
   interface Discipline {
     key: "id";

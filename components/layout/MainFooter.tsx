@@ -1,13 +1,12 @@
 import { Layout, Row, Col } from "antd";
-import Link from "next/link";
 import styled from "styled-components";
 
 const { Footer } = Layout;
 
 const StyledFooter = styled(Footer)`
   ${({ theme }) => `
-        text-align: center;
-    `}
+     text-align: center;
+  `}
 `;
 export const MainFooter = () => (
   <StyledFooter>

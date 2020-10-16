@@ -7,7 +7,7 @@ import { Layout } from "antd";
 import { MainFooter } from "./MainFooter";
 import styled from "styled-components";
 import { LandingNavbar } from "./LandingNavbar";
-import { MainHead } from "./MainHead"
+import { MainHead } from "./MainHead";
 
 const { Content } = Layout;
 

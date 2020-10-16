@@ -28,30 +28,16 @@ type UpdateEmployeeDisciplineFormProps = {
   handleCancel: any;
 };
 
-const StyledPageTitle = styled.h3`
-  ${({ theme }) => `
-        color: inherit;
-        text-align: left;
-        margin-bottom: ${theme["margin-medium"]};
-    `}
-`;
-
 const StyledForm = styled(Form)`
   ${({ theme }) => `
-        max-width: 900px;
-    `}
-`;
-
-const StyledResetButton = styled(ResetButton)`
-  ${({ theme }) => `
-        margin-left: ${theme["margin-xsmall"]};
-    `}
+    max-width: 900px;
+  `}
 `;
 
 const StyledButton = styled(Button)`
   ${({ theme }) => `
-        margin-left: ${theme["margin-xsmall"]};
-    `}
+    margin-left: ${theme["margin-xsmall"]};
+  `}
 `;
 
 export const UpdateEmployeeDisciplineForm = ({
@@ -225,7 +211,7 @@ export const UpdateEmployeeDisciplineForm = ({
       false
     );
   };
-  
+
   return (
     <>
       <Formik
@@ -260,10 +246,7 @@ export const UpdateEmployeeDisciplineForm = ({
         enableReinitialize={true}
       >
         {(props) => {
-          const {
-            values,
-            setFieldValue,
-          } = props;
+          const { values, setFieldValue } = props;
           return (
             <StyledForm>
               <GenerateObjectDropdown
@@ -296,7 +279,7 @@ export const UpdateEmployeeDisciplineForm = ({
                 <StyledButton danger onClick={handleDelete} type="primary">
                   Delete
                 </StyledButton>
-               <StyledButton danger onClick={handleCancel}>
+                <StyledButton danger onClick={handleCancel}>
                   Cancel
                 </StyledButton>
               </Col>

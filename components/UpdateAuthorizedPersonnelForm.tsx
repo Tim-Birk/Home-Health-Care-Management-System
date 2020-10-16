@@ -4,7 +4,6 @@ import * as _ from "lodash";
 import { authorizedPersonnelGraphQL } from "../graphql/queries/authorizedPersonnel";
 import { updateAuthorizedPersonnelGraphQL } from "../graphql/mutations/updateAuthorizedPersonnel";
 import { publishAuthorizedPersonnelGraphQL } from "../graphql/mutations/publishAuthorizedPersonnel";
-
 import { canVerifyTypes } from "../utils/staticLists";
 import { createAuthorizedPersonnelUpdateObj } from "../utils/createUpdateObj";
 import { submitForm } from "../utils/submitForm";
@@ -27,30 +26,16 @@ type UpdateAuthorizedPersonnelFormProps = {
   handleCancel: any;
 };
 
-const StyledPageTitle = styled.h3`
-  ${({ theme }) => `
-        color: inherit;
-        text-align: left;
-        margin-bottom: ${theme["margin-medium"]};
-    `}
-`;
-
 const StyledForm = styled(Form)`
   ${({ theme }) => `
-        max-width: 900px;
-    `}
-`;
-
-const StyledResetButton = styled(ResetButton)`
-  ${({ theme }) => `
-        margin-left: ${theme["margin-xsmall"]};
-    `}
+    max-width: 900px;
+  `}
 `;
 
 const StyledButton = styled(Button)`
   ${({ theme }) => `
-        margin-left: ${theme["margin-xsmall"]};
-    `}
+    margin-left: ${theme["margin-xsmall"]};
+  `}
 `;
 
 export const UpdateAuthorizedPersonnelForm = ({

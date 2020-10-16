@@ -16,17 +16,17 @@ type CompanyBranchesProps = {
 
 const StyledPageTitle = styled.h3`
   ${({ theme }) => `
-        color: inherit;
-        text-align: left;
-        margin-bottom: ${theme["margin-medium"]};
-    `}
+    color: inherit;
+    text-align: left;
+    margin-bottom: ${theme["margin-medium"]};
+  `}
 `;
 
 const StyledNewBranchButton = styled(Button)`
   ${({ theme }) => `
-        margin-bottom: ${theme["margin-small"]};
-        width: 125px;
-    `}
+    margin-bottom: ${theme["margin-small"]};
+    width: 125px;
+  `}
 `;
 
 export const CompanyBranches = ({

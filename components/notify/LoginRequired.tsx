@@ -5,17 +5,17 @@ import { Button } from "antd";
 
 const StyledCol = styled(Col)`
   ${({ theme }) => `
-  text-align: center;
-  margin-top: 225px;
-  max-width: 800px;
-  .messageContainer {
+    text-align: center;
+    margin-top: 225px;
+    max-width: 800px;
+    
+    .messageContainer {
       border: 1px solid black;
       border-radius: 0.5em;
       padding: ${theme["padding-small"]} ${theme["padding-small"]};
       max-width: 400px;
       margin: 0 auto;
     }
-  
   `}
 `;
 

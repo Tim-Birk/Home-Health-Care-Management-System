@@ -1,7 +1,5 @@
-import { Menu, Select, Dropdown } from "antd";
+import { Menu } from "antd";
 import * as _ from "lodash";
-import Icon from "@ant-design/icons";
-import { useState } from "react";
 
 type MenuListProps = {
   iterableList: string[];
@@ -38,34 +36,6 @@ export const MenuList = ({
     </Menu>
   );
 };
-// export const MenuList = ({
-//   iterableList,
-//   name,
-//   handleDropdownChange,
-// }: MenuListProps) => {
-
-//   const menu = (
-//     <Menu>
-//       {iterableList.map((item: string) => (
-//         <Menu.Item
-//           key={`${item}`}
-//           title={`${name}`}
-//           onClick={handleDropdownChange}
-//         >
-//           {item}
-//         </Menu.Item>
-//       ))}
-//     </Menu>
-//   );
-
-//   return (
-//     <Dropdown overlay={menu} trigger={['click']}>
-//       <a className="ant-dropdown-link" href="#">
-//         Hover me <Icon type="down" />
-//       </a>
-//     </Dropdown>
-//   );
-// };
 
 export const ObjectMenuList = ({
   iterableList,
@@ -81,7 +51,6 @@ export const ObjectMenuList = ({
         onClick={handleDropdownChange}
       >
         {item.name}
-        {/* {_.get("name", _.find(iterableList, {id: item.id}),{})} */}
       </Menu.Item>
     ))}
   </Menu>

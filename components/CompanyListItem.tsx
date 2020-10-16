@@ -7,40 +7,38 @@ import { Card } from "antd";
 
 const StyledCompany = styled(Col)`
   ${({ theme }) => `
-        max-width: 375px;
-        padding: 0px ${theme["padding-xsmall"]};
-        .ant-card {
-            margin-bottom: .75rem;
-        }
-        p{
-            padding: 0px ${theme["padding-small"]};
-            text-align: center;
-        }
-        .nameContainer {
-            background-color: white;
-            height: 95px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            h2 {
-                color: inherit;
-                padding: 0px ${theme["padding-small"]};
-                line-height: 1.25em;
-            }
-        }
-        .companyTitle {
+      max-width: 375px;
+      padding: 0px ${theme["padding-xsmall"]};
+      .ant-card {
+          margin-bottom: .75rem;
+      }
+      p{
+          padding: 0px ${theme["padding-small"]};
+          text-align: center;
+      }
+      .nameContainer {
+          background-color: white;
+          height: 95px;
           display: flex;
-          flex-direction: column;
           align-items: center;
-        }
-        .companyInfo {
-            font-size: 1.25em;
-            text-align: center;
-            // font-weight: bold;
-        }
-    `}
+          justify-content: center;
+          h2 {
+            color: inherit;
+            padding: 0px ${theme["padding-small"]};
+            line-height: 1.25em;
+          }
+      }
+      .companyTitle {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .companyInfo {
+        font-size: 1.25em;
+        text-align: center;
+      }
+  `}
 `;
-
 
 export const CompanyListItem = ({
   company,

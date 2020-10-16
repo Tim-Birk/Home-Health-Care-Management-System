@@ -8,14 +8,9 @@ import { CheckOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 import { Loading } from "./notify/Loading";
 import { Error } from "./notify/Error";
-import Link from "next/link";
-import { formatDateMMDDYYYY } from "../utils/format";
 import { TabWarning } from "./notify/Warning";
-import Media from "react-media";
 import { CreateAuthorizedPersonnelForm } from "./CreateAuthorizedPersonnelForm";
 import { UpdateAuthorizedPersonnelForm } from "./UpdateAuthorizedPersonnelForm";
-// import { UpdateauthorizedPersonnelForm } from "./UpdateauthorizedPersonnelForm";
-// import { CreateauthorizedPersonnelForm } from "./CreateauthorizedPersonnelForm";
 
 type AuthorizedPersonnelProps = {
   id: any;
@@ -24,37 +19,31 @@ type AuthorizedPersonnelProps = {
 
 const StyledPageTitle = styled.h3`
   ${({ theme }) => `
-        color: inherit;
-        text-align: left;
-        margin-bottom: ${theme["margin-medium"]};
-    `}
+    color: inherit;
+    text-align: left;
+    margin-bottom: ${theme["margin-medium"]};
+  `}
 `;
 
 const StyledNewButton = styled(Button)`
   ${({ theme }) => `
-        margin-bottom: ${theme["margin-small"]};
-        width: auto;
-    `}
+    margin-bottom: ${theme["margin-small"]};
+    width: auto;
+  `}
 `;
 
 const StyledError = styled(Error)`
   ${({ theme }) => `
-        .ant-col {
-          margin-top: 0;
-        }
-    `}
+    .ant-col {
+      margin-top: 0;
+    }
+  `}
 `;
 
 const StyledTable = styled(Table)`
   ${({ theme }) => `
-        max-width: 1000px;
-    `}
-`;
-
-const StyledCheck = styled(CheckOutlined)`
-  ${({ theme }) => `
-
-    `}
+    max-width: 1000px;
+  `}
 `;
 
 export const AuthorizedPersonnel = ({

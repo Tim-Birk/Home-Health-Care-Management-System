@@ -36,22 +36,22 @@ type UpdateBranchProfileFormProps = {
 
 const StyledPageTitle = styled.h3`
   ${({ theme }) => `
-        color: inherit;
-        text-align: left;
-        margin-bottom: ${theme["margin-medium"]};
-    `}
+    color: inherit;
+    text-align: left;
+    margin-bottom: ${theme["margin-medium"]};
+  `}
 `;
 
 const StyledForm = styled(Form)`
   ${({ theme }) => `
-        max-width: 900px;
-    `}
+    max-width: 900px;
+  `}
 `;
 
 const StyledResetButton = styled(ResetButton)`
   ${({ theme }) => `
-        margin-left: ${theme["margin-xsmall"]};
-    `}
+    margin-left: ${theme["margin-xsmall"]};
+  `}
 `;
 
 export const UpdateBranchProfileForm = ({
@@ -172,7 +172,9 @@ export const UpdateBranchProfileForm = ({
           phone: Yup.string()
             .matches(phoneRegExp, "Number is not valid")
             .required("Required"),
-          fax: Yup.string().matches(phoneRegExp, "Number is not valid").nullable(),
+          fax: Yup.string()
+            .matches(phoneRegExp, "Number is not valid")
+            .nullable(),
           contactName: Yup.string().required("Required"),
           contactPhone: Yup.string()
             .matches(phoneRegExp, "Number is not valid")

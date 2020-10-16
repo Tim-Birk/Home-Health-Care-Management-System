@@ -35,7 +35,6 @@ import {
   socialMask,
   socialRegExp,
 } from "../utils/inputMasks";
-import { validateSDL } from "graphql/validation/validate";
 
 type UpdateEmployeeProfileFormProps = {
   id: any;
@@ -46,14 +45,14 @@ type UpdateEmployeeProfileFormProps = {
 
 const StyledForm = styled(Form)`
   ${({ theme }) => `
-        max-width: 900px;
-    `}
+    max-width: 900px;
+  `}
 `;
 
 const StyledResetButton = styled(ResetButton)`
   ${({ theme }) => `
-        margin-left: ${theme["margin-xsmall"]};
-    `}
+    margin-left: ${theme["margin-xsmall"]};
+  `}
 `;
 
 export const UpdateEmployeeProfileForm = ({

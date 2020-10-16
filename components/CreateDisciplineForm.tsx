@@ -9,52 +9,31 @@ import { publishDisciplineGraphQL } from "../graphql/mutations/publishDiscipline
 import { Loading } from "./notify/Loading";
 import { useState } from "react";
 import styled from "styled-components";
-import {
-  GenerateInput,
-  GenerateCheckbox,
-  GenerateDropdown,
-} from "./GenerateFormikFields";
+import { GenerateInput } from "./GenerateFormikFields";
 import * as Yup from "yup";
 import Router from "next/router";
 
-
-
 type CreateDisciplineFormProps = {
   id: any;
-
   handleCancel: any;
 };
 
-const StyledPageTitle = styled.h3`
-  ${({ theme }) => `
-        color: inherit;
-        text-align: left;
-        margin-bottom: ${theme["margin-medium"]};
-    `}
-`;
-
 const StyledAlert = styled(Alert)`
   ${({ theme }) => `
-        margin-bottom: ${theme["margin-small"]};
-    `}
+    margin-bottom: ${theme["margin-small"]};
+  `}
 `;
 
 const StyledForm = styled(Form)`
   ${({ theme }) => `
-        max-width: 900px;
-    `}
-`;
-
-const StyledResetButton = styled(ResetButton)`
-  ${({ theme }) => `
-        margin-left: ${theme["margin-xsmall"]};
-    `}
+    max-width: 900px;
+  `}
 `;
 
 const StyledButton = styled(Button)`
   ${({ theme }) => `
-        margin-left: ${theme["margin-xsmall"]};
-    `}
+    margin-left: ${theme["margin-xsmall"]};
+  `}
 `;
 
 export const CreateDisciplineForm = ({

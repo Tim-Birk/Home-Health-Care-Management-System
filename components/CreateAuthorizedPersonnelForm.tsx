@@ -3,7 +3,7 @@ import { Formik } from "formik";
 import { Form, SubmitButton, ResetButton } from "formik-antd";
 import * as _ from "lodash";
 import { submitForm } from "../utils/submitForm";
-import { useMutation, useQuery } from "@apollo/react-hooks";
+import { useMutation } from "@apollo/react-hooks";
 import { createAuthorizedPersonnelGraphQL } from "../graphql/mutations/createAuthorizedPersonnel";
 import { publishAuthorizedPersonnelGraphQL } from "../graphql/mutations/publishAuthorizedPersonnel";
 import { canVerifyTypes } from "../utils/staticLists";
@@ -33,26 +33,20 @@ const StyledPageTitle = styled.h3`
 
 const StyledAlert = styled(Alert)`
   ${({ theme }) => `
-        margin-bottom: ${theme["margin-small"]};
-    `}
+      margin-bottom: ${theme["margin-small"]};
+  `}
 `;
 
 const StyledForm = styled(Form)`
   ${({ theme }) => `
-        max-width: 900px;
-    `}
-`;
-
-const StyledResetButton = styled(ResetButton)`
-  ${({ theme }) => `
-        margin-left: ${theme["margin-xsmall"]};
-    `}
+      max-width: 900px;
+  `}
 `;
 
 const StyledButton = styled(Button)`
   ${({ theme }) => `
-        margin-left: ${theme["margin-xsmall"]};
-    `}
+    margin-left: ${theme["margin-xsmall"]};
+  `}
 `;
 
 export const CreateAuthorizedPersonnelForm = ({
