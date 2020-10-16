@@ -1,0 +1,30 @@
+{
+    "version": 2,
+    "build": {
+      "env": {
+        "BACKEND_URL": "@hcm_backend_url",
+        "APIURL": "@hcm_apiurl",
+        "APIKEY": "@hcm_apikey",
+        "PROJECTID": "@hcm_projectid",
+        "BRANCH": "@hcm_branch",
+        "CDNBASE": "@hcm_cdnbase"
+      }
+    },
+    "env": {
+      "GRAPHCMSID": "@hcm_graphcmsid",
+      "GRAPHCMSURL": "@hcm_graphcmsurl",
+      "APIURL": "@hcm_apiurl",
+      "APIKEY": "@hcm_apikey",
+      "PROJECTID": "@hcm_projectid",
+      "BRANCH": "@hcm_branch",
+      "CDNBASE": "@hcm_cdnbase",
+      "domain": "@hcm_domain",
+      "clientId": "@hcm_clientid",
+      "clientSecret": "@hcm_clientsecret",
+      "redirectUri": "@hcm_redirecturi",
+      "postLogoutRedirectUri": "@hcm_postlogoutredirecturi",
+      "cookieSecret": "@hcm_cookiesecret",
+      "BACKEND_URL": "@hcm_backend_url",
+      "GRAPHCMSTOKEN": "@hcm_graphcmstoken"
+    }
+  }
